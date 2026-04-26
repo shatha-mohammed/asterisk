@@ -1,7 +1,10 @@
-import heroImage from "../assets/hero.png";
+import { useAppNavigation } from "../hooks/useAppNavigation";
 import Button from "./ui/Button";
+import heroImage from "../assets/hero.png";
 
 export default function Hero() {
+  const { goToRegister } = useAppNavigation();
+
   return (
     <div className="my-23 grid grid-cols-1 items-center justify-center gap-12.5 sm:my-0 sm:h-[calc(100vh-64px)] sm:grid-cols-2">
       <div className="flex flex-col">
@@ -16,7 +19,7 @@ export default function Hero() {
         </p>
 
         <div className="flex max-w-125 flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start">
-          <Button text="Get Started" size="full" />
+          <Button text="Get Started" size="full" onClick={goToRegister} />
           <Button text="View Demo" size="full" variant="outline" />
         </div>
       </div>

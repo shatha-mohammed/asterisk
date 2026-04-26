@@ -10,18 +10,18 @@ export default function Hero() {
           <span className="text-brand-accent">calm control</span>.
         </h2>
 
-        <p className="my-3.75 text-[18px] leading-7 text-slate-600">
+        <p className="my-3.75 text-[18px] leading-7 text-slate-600 sm:my-7.5">
           The high-end productivity workspace built for independent contractors
           who demand professional grade financial and project oversight.
         </p>
 
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start">
+        <div className="flex max-w-125 flex-col items-center justify-center gap-4 sm:flex-row sm:justify-start">
           <Button text="Get Started" size="full" />
           <Button text="View Demo" size="full" variant="outline" />
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <div className="shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05) w-fit rotate-3 overflow-hidden rounded-2xl p-3 shadow-2xl">
+        <div className="shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05) w-fit overflow-hidden rounded-2xl p-3 shadow-2xl sm:rotate-3">
           <img src={heroImage} alt="hero photo" className="h-full w-full" />
         </div>
       </div>

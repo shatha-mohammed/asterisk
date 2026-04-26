@@ -177,3 +177,11 @@
 // );
 
 // export default Invoices;
+
+import React from 'react';
+
+const Invoices = () => {
+  return <div>صفحة الفواتير</div>;
+};
+
+export default Invoices; 

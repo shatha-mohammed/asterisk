@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="flex h-16 items-center justify-between bg-white">
+      <div className="fixed top-0 left-0 z-50 flex h-16 w-full items-center justify-between bg-white px-4 shadow-md lg:px-24">
         <div className="flex items-center justify-center gap-3">
           <Button
             onClick={() => setIsOpen(true)}

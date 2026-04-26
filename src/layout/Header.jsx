@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useAppNavigation } from "../hooks/useAppNavigation";
 import Button from "../Components/ui/Button";
 import Logo from "../Components/ui/Logo";
 import DrawerMenu from "../Components/DrawerMenu";
@@ -13,6 +14,7 @@ const navLinks = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { goToLogin } = useAppNavigation();
 
   return (
     <>
@@ -48,7 +50,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <Button text="Login" size="md" />
+        <Button text="Login" size="md" onClick={goToLogin} />
       </div>
 
       {/* Mobile Menu */}

@@ -1,10 +1,18 @@
 import { Routes, Route } from "react-router-dom";
-import AppLayout from "./layout/AppLayout";
+import Header from "./layout/Header";
+import Home from "./pages/Home";
+import Pricing from "./pages/Pricing";
+import About from "./pages/About";
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<AppLayout><div>Dashboard</div></AppLayout>} />
-    </Routes>
+    <div className="px-4">
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/pricing" element={<Pricing />}></Route>
+        <Route path="/about" element={<About />}></Route>
+      </Routes>
+    </div>
   );
 }

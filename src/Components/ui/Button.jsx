@@ -19,6 +19,7 @@ export default function Button({
       "border border-indigo-300 text-indigo-900 bg-transparent hover:bg-indigo-50",
     danger: "bg-red-600 text-white hover:bg-red-700",
     ghost: "bg-transparent text-indigo-900 hover:bg-slate-100",
+    white: "bg-white text-indigo-900 hover:bg-indigo-100",
   };
 
   const baseStyles =

@@ -3,4 +3,5 @@
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui;
   --color-brand-accent: #4648d4;
+  --color-muted: #464553;
 }

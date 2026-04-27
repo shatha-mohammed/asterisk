@@ -10,6 +10,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard.jsx"; 
 import Reports from "./pages/Reports";
 import Invoices from "./pages/Invoices"; 
+import Expenses from './pages/Expenses'; 
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
   <Route element={<AppLayout />}>
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/invoices" element={<Invoices />} />
+    <Route path="/expenses" element={<Expenses />} /> 
     <Route path="/reports" element={<Reports />} />
   </Route>
 </Routes>

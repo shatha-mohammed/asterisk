@@ -1,9 +1,16 @@
+import { Loader2 } from "lucide-react";
+
 export default function Button({
   text,
+  children,
   onClick,
   variant = "primary",
   size = "md",
   className = "",
+  isLoading = false,
+  type = "button",
+  disabled,
+  ...props
 }) {
   const sizeStyles = {
     fit: "",
@@ -27,10 +34,15 @@ export default function Button({
 
   return (
     <button
+      type={type}
       onClick={onClick}
+      disabled={isLoading || disabled}
       className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      {...props}
     >
-      {text}
+      {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+
+      {children || text}
     </button>
   );
 }

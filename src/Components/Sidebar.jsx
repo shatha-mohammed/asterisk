@@ -13,6 +13,8 @@ import {
   PlusCircle 
 } from 'lucide-react';
 import Button from "./ui/Button";
+import Logo from './ui/Logo';
+
 const Sidebar = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth); 
@@ -28,6 +30,9 @@ const Sidebar = () => {
 
   return (
     <div className="w-64 h-screen bg-white border-r border-slate-100 flex flex-col p-6 sticky top-0">
+      <div className="p-6">
+  <Logo />
+</div>
       {/* عرض بيانات المستخدم إذا كان مسجلاً [cite: 4] */}
       {user && (
         <div className="mb-10 px-2 flex items-center gap-3">

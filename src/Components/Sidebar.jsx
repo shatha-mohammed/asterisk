@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/slices/authSlice'; // استيراد الأكشن من شغل أحمد
+import { logout } from '../store/slices/authSlice'; 
 import { 
   LayoutDashboard, 
   Briefcase, 
@@ -12,10 +12,10 @@ import {
   LogOut,
   PlusCircle 
 } from 'lucide-react';
-
+import Button from "./ui/Button";
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth); // جلب بيانات المستخدم 
+  const { user } = useSelector(state => state.auth); 
   const location = useLocation();
 
   const navItems = [
@@ -58,10 +58,18 @@ const Sidebar = () => {
       </nav>
 
       <div className="mt-auto space-y-6">
-        <button className="w-full bg-[#2D3184] text-white py-3 rounded-xl font-bold text-sm shadow-lg hover:bg-indigo-900 flex items-center justify-center gap-2 transition-all active:scale-95">
-          <PlusCircle size={18} />
-          Create New
-        </button>
+       <Button 
+  text={
+    <div className="flex items-center justify-center gap-2">
+      <PlusCircle size={18} />
+      Create New
+    </div>
+  }
+  variant="primary"
+  size="full" 
+  className="rounded-xl shadow-lg" 
+  onClick={() => console.log("Create New Clicked")}
+/>
 
         <div className="pt-6 border-t border-slate-50 space-y-1">
           <button className="w-full flex items-center gap-4 px-4 py-2 text-slate-400 font-bold text-sm hover:text-slate-600 transition-colors">

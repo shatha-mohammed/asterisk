@@ -7,7 +7,7 @@ import {
 import { formatCurrency, formatDate } from '../utils/formatters';
 import { fetchProjects } from '../store/slices/projectsSlice';
 import { fetchInvoices } from '../store/slices/invoicesSlice';
-
+import Button from "../components/ui/Button";
 export default function Dashboard() {
   const dispatch = useDispatch();
   const today = new Date().toISOString();
@@ -40,11 +40,12 @@ export default function Dashboard() {
             </h1>
             <p className="text-slate-400 text-sm mt-1 font-medium font-sans">Today is {formatDate(today)}</p>
           </div>
-
-          <button className="flex items-center justify-center gap-2 mt-4 bg-[#2D3184] text-white w-full lg:w-auto px-8 py-4 rounded-2xl font-bold shadow-xl shadow-indigo-100 hover:scale-[1.02] active:scale-95 transition-all">
-            <Plus size={20} />
-            <span className="text-sm tracking-wide">Add Project</span>
-          </button>
+<Button 
+  text={<><Plus size={20} /> Add Project</>}
+  variant="primary"
+  className="mt-4 w-full lg:w-auto"
+  onClick={() => console.log('Open Modal')}
+/>
         </div>
 
         {/* 2. شريط الإحصائيات */}
@@ -102,8 +103,13 @@ export default function Dashboard() {
               <ActivityItem color="bg-indigo-500" title="Design Updated" sub="Layout components unified" />
               <ActivityItem color="bg-orange-500" title="CORS Handled" sub="Pending server fix" />
             </div>
-            <button className="w-full mt-8 py-4 bg-slate-50 hover:bg-slate-100 rounded-2xl text-[10px] font-black text-indigo-600 tracking-widest transition-all">VIEW ALL</button>
-          </div>
+<Button 
+  text="VIEW ALL" 
+  variant="ghost" 
+  size="full" 
+  className="mt-8 tracking-widest text-[10px] font-black"
+  onClick={() => console.log("View All Activity")}
+/>          </div>
         </div>
 
         {/* 4. قسم المشاريع الحالية */}
@@ -156,9 +162,14 @@ export default function Dashboard() {
       </main>
 
       {/* زر الإضافة العائم للموبايل */}
-      <button className="lg:hidden fixed bottom-24 right-6 w-14 h-14 bg-[#2D3184] text-white rounded-2xl shadow-2xl flex items-center justify-center z-40 active:scale-90 transition-transform">
-        <Plus size={28} />
-      </button>
+      <div className="lg:hidden fixed bottom-24 right-6 z-40">
+  <Button 
+    text={<Plus size={28} />}
+    variant="primary"
+    className="w-14 h-14 !p-0 shadow-2xl active:scale-90" 
+    onClick={() => console.log("Mobile Add Clicked")}
+  />
+</div>
     </div>
   );
 }

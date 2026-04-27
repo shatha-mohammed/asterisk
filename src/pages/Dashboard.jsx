@@ -115,8 +115,8 @@ export default function Dashboard() {
         {/* 4. قسم المشاريع الحالية */}
         <section className="pb-10 lg:pb-0">
           <div className="flex justify-between items-center mb-6 px-4">
-            <h2 className="text-xl font-bold text-[#1E293B] ">Current Projects</h2>
-            <button className="text-sm font-bold text-indigo-600">View Project Board</button>
+            <h2 className="text-xl font-bold text-[#41506a] ">Current Projects</h2>
+            <button className="text-sm font-bold text-indigo-600">View All</button>
           </div>
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
   {/* إذا كانت البيانات من السيرفر فارغة (بسبب خطأ CORS)، سنعرض مشاريع تجريبية */}

@@ -214,3 +214,11 @@
 // );
 
 // export default Reports;
+
+import React from 'react';
+
+const Reports = () => {
+  return <div>صفحة التقارير</div>;
+};
+
+export default Reports; 

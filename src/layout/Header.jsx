@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { NavLink } from "react-router-dom";
-<<<<<<< Updated upstream
 import { useAppNavigation } from "../hooks/useAppNavigation";
-import Button from "../Components/ui/Button";
-=======
 import Button from "../components/ui/Button";
->>>>>>> Stashed changes
-import Logo from "../Components/ui/Logo";
-import DrawerMenu from "../Components/DrawerMenu";
+import Logo from "../components/ui/Logo";
+import DrawerMenu from "../components/DrawerMenu";
 
 const navLinks = [
   { name: "Home", path: "/" },

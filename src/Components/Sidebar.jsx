@@ -22,11 +22,10 @@ const Sidebar = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
-    { name: 'Projects', path: '/projects', icon: <Briefcase size={20} /> },
+    { name: 'Projects', path: '/add-project', icon: <Briefcase size={20} /> }, 
     { name: 'Invoices', path: '/invoices', icon: <FileText size={20} /> },
     { name: 'Clients', path: '/clients', icon: <Users size={20} /> },
     { name: 'Expenses', path: '/expenses', icon: <Receipt size={20} /> }, 
-    { name: 'Reports', path: '/reports', icon: <BarChart3 size={20} /> },
   ];
 
   return (

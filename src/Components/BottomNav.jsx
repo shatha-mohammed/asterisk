@@ -4,9 +4,9 @@ import { LayoutDashboard, FileText, Briefcase, Users, Receipt } from "lucide-rea
 const BottomNav = () => {
   const navItems = [
     { name: 'Home', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
-    { name: 'Projects', path: '/projects', icon: <Briefcase size={20} /> },
+    { name: 'Projects', path: '/add-project', icon: <Briefcase size={20} /> }, 
     { name: 'Invoices', path: '/invoices', icon: <FileText size={20} /> },
-    { name: 'Expenses', path: '/expenses', icon: <Receipt size={20} /> }, // 2. استبدلنا Reports بالمصاريف
+    { name: 'Expenses', path: '/expenses', icon: <Receipt size={20} /> }, 
     { name: 'Clients', path: '/clients', icon: <Users size={20} /> },
   ];
 

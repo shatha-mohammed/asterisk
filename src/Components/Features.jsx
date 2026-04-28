@@ -1,4 +1,4 @@
-import FeaturesCard from "../components/ui/FeaturesCard";
+import FeaturesCard from "./ui/FeaturesCard";
 import {
   LayoutDashboardIcon,
   ReceiptTextIcon,

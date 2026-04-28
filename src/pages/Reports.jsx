@@ -5,7 +5,7 @@
 //   ArrowUpRight, ArrowDownRight, Briefcase, DollarSign, Clock, AlertTriangle,
 //   LayoutDashboard, FileText, BarChart3, Users 
 // } from 'lucide-react';
-// import Sidebar from "../components/Sidebar";
+// import Sidebar from "../Components/Sidebar";
 
 // const Reports = () => {
 //   const [isMenuOpen, setIsMenuOpen] = useState(false);

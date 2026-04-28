@@ -24,7 +24,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <div className="shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05) w-fit overflow-hidden rounded-2xl p-3 shadow-2xl sm:rotate-3">
+        <div className="w-fit overflow-hidden rounded-2xl p-3 shadow-2xl shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] sm:rotate-3">
           <img src={heroImage} alt="hero photo" className="h-full w-full" />
         </div>
       </div>

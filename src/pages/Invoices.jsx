@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchInvoices } from '../store/slices/invoicesSlice';
 import { Plus, Wallet, CheckCircle2, AlertCircle } from 'lucide-react';
-import Button from "../components/ui/Button";
-import StatCard from "../components/ui/StatCard";
-import InvoicesTable from "../components/InvoicesTable"; 
+import Button from "../Components/ui/Button";
+import StatCard from "../Components/ui/StatCard";
+import InvoicesTable from "../Components/InvoicesTable"; 
 
 const Invoices = () => {
   const dispatch = useDispatch();

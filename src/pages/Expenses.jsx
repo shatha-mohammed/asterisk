@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchExpenses } from '../store/slices/expensesSlice';
 import { Plus, Receipt, TrendingDown, Calendar } from 'lucide-react';
-import Button from "../components/ui/Button";
-import StatCard from "../components/ui/StatCard";
+import Button from "../Components/ui/Button";
+import StatCard from "../Components/ui/StatCard";
 
 const Expenses = () => {
   const dispatch = useDispatch();

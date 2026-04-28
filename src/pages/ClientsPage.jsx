@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchClients } from '../store/slices/clientsSlice'; 
 
-import ClientsActions from '../components/ClientsActions';
-import ClientsTable from '../components/ClientsTable';
-import ClientsStatCards from '../components/ClientsStatCards';
+import ClientsActions from '../Components/ClientsActions';
+import ClientsTable from '../Components/ClientsTable';
+import ClientsStatCards from '../Components/ClientsStatCards';
 
 const ClientsPage = () => {
   const dispatch = useDispatch();

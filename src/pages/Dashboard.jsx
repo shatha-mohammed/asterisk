@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Briefcase, FileText, Plus, DollarSign } from 'lucide-react';
 import { fetchProjects } from '../store/slices/projectsSlice';
 import { fetchInvoices } from '../store/slices/invoicesSlice';
-import Button from "../components/ui/Button";
-import StatCard from "../components/ui/StatCard";
-import ProjectCard from "../components/ProjectCard";
-import InvoicesTable from "../components/InvoicesTable"; // استدعينا الجدول المشترك
+import Button from "../Components/ui/Button";
+import StatCard from "../Components/ui/StatCard";
+import ProjectCard from "../Components/ProjectCard";
+import InvoicesTable from "../Components/InvoicesTable"; // استدعينا الجدول المشترك
 
 export default function Dashboard() {
   const dispatch = useDispatch();

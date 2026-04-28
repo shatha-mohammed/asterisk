@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { addProject } from '../store/slices/projectsSlice';
 import { fetchClients } from '../store/slices/clientsSlice';
-import Button from '../components/ui/Button';
-import ProjectIdentity from '../components/ProjectIdentity';
-import ProjectCommercials from '../components/ProjectCommercials';
-import ProjectLogistics from '../components/ProjectLogistics';
+import Button from '../Components/ui/Button';
+import ProjectIdentity from '../Components/ProjectIdentity';
+import ProjectCommercials from '../Components/ProjectCommercials';
+import ProjectLogistics from '../Components/ProjectLogistics';
 
 const AddProjectPage = () => {
   const navigate = useNavigate();

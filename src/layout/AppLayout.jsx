@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Sidebar from "../components/Sidebar";
-import BottomNav from "../components/BottomNav";
-import TopBar from "../components/TopBar"; 
+import Sidebar from "../Components/Sidebar";
+import BottomNav from "../Components/BottomNav";
+import TopBar from "../Components/TopBar"; 
 
 export default function AppLayout() {
   const { user } = useSelector((state) => state.auth);

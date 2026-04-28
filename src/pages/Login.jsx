@@ -4,8 +4,8 @@ import { loginUser, clearError } from "../store/slices/authSlice";
 import { useAppNavigation } from "../hooks/useAppNavigation";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import AuthFooter from "../Components/AuthFooter";
-import AuthRedirect from "../Components/AuthRedirect";
+import AuthFooter from "../components/AuthFooter";
+import AuthRedirect from "../components/AuthRedirect";
 
 export default function Login() {
   const dispatch = useDispatch();

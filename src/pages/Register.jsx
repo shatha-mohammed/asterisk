@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import { supabase } from "../services/supabaseClient";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
-import AuthFooter from "../Components/AuthFooter";
-import AuthRedirect from "../Components/AuthRedirect";
+import AuthFooter from "../components/AuthFooter";
+import AuthRedirect from "../components/AuthRedirect";
 
 export default function Register() {
   const dispatch = useDispatch();

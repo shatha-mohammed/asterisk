@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Reports from "./pages/Reports";
 import Invoices from "./pages/Invoices"; 
 import Expenses from './pages/Expenses'; 
+import ClientsPage from './pages/ClientsPage';
+import AddProjectPage from './pages/AddProjectPage';
 
 export default function App() {
   return (
@@ -26,7 +28,8 @@ export default function App() {
     <Route path="/invoices" element={<Invoices />} />
     <Route path="/expenses" element={<Expenses />} /> 
     <Route path="/reports" element={<Reports />} />
-  </Route>
+    <Route path="/clients" element={<ClientsPage />} />
+    <Route path="/addproject" element={<AddProjectPage />} />  </Route>
 </Routes>
 )
 }

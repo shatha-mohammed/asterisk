@@ -5,6 +5,7 @@ import clientsReducer from "./slices/clientsSlice";
 import invoicesReducer from "./slices/invoicesSlice";
 import expensesReducer from "./slices/expensesSlice";
 
+// Central Redux Store Configuration
 export const store = configureStore({
   reducer: {
     auth: authReducer,

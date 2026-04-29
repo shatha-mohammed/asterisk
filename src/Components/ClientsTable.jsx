@@ -1,86 +1,149 @@
-import React from 'react';
-import { MoreHorizontal, FileText, ChevronLeft, ChevronRight, Mail, DollarSign } from 'lucide-react';
-import StatusBadge from './ui/StatusBadge';
+import { StatusBadge, ActionButtons } from "@/components/ui";
 
-const ClientsTable = ({ clients = [], isLoading = false }) => {
-  const dummyData = [
-    { id: 1, initials: 'SH', name: 'Sarah Henderson', email: 'sarah@nexustech.io', company: 'Nexus Tech Solutions', projects: 12, revenue: 45200.00, status: 'Active' },
-    { id: 2, initials: 'MK', name: 'Marcus Knight', email: 'marcus@knightventures.com', company: 'Knight Ventures', projects: 2, revenue: 8500.00, status: 'Lead' },
-  ];
-
-  const displayData = (clients && Array.isArray(clients) && clients.length > 0) ? clients : dummyData;
-
-  if (isLoading) return <div className="h-64 flex items-center justify-center animate-pulse text-gray-400">Loading...</div>;
+const ClientsTable = ({
+  clients = [],
+  isLoading = false,
+  onEdit,
+  onDelete,
+}) => {
+  if (isLoading)
+    return (
+      <div className="flex h-64 animate-pulse items-center justify-center text-slate-400">
+        Loading...
+      </div>
+    );
 
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 gap-4 md:hidden">
-        {displayData.map((client) => (
-          <div key={client.id} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-4">
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#EEF2FF] text-[#4F46E5] flex items-center justify-center font-bold text-xs">
-                  {client.initials || client.name.substring(0, 2).toUpperCase()}
+        {clients?.length > 0 ? (
+          clients.map((client) => (
+            <div
+              key={client.id}
+              className="space-y-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EEF2FF] text-xs font-bold text-[#4F46E5]">
+                    {client.name.substring(0, 2).toUpperCase()}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900">
+                      {client.name}
+                    </h3>
+                    <p className="text-[11px] text-slate-400">{client.email}</p>
+                  </div>
                 </div>
+                <StatusBadge status={client.status || "Active"} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 border-t border-slate-50 pt-2">
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">{client.name}</h3>
-                  <p className="text-[11px] text-gray-400">{client.email}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">
+                    Company
+                  </p>
+                  <p className="text-xs font-medium text-slate-600">
+                    {client.company}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase">
+                    Phone
+                  </p>
+                  <p className="text-xs font-bold text-slate-500">
+                    {client.phone}
+                  </p>
                 </div>
               </div>
-              <StatusBadge status={client.status} />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-50">
-              <div>
-                <p className="text-[10px] text-gray-400 uppercase font-bold">Company</p>
-                <p className="text-xs font-medium text-gray-600">{client.company}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-[10px] text-gray-400 uppercase font-bold">Revenue</p>
-                <p className="text-xs font-bold text-[#2D3184]">${client.revenue.toLocaleString()}</p>
+              <div className="pt-2">
+                <ActionButtons
+                  onEdit={() => onEdit && onEdit(client.id)}
+                  onDelete={() => onDelete && onDelete(client.id)}
+                />
               </div>
             </div>
+          ))
+        ) : (
+          <div className="rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">
+            <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
+              No Clients Found
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
-      <div className="hidden md:block bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
+      <div className="hidden overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm md:block">
         <table className="w-full text-left">
-          <thead className="bg-[#F9FAFB] border-b border-gray-100">
+          <thead className="border-b border-slate-100 bg-[#F9FAFB]">
             <tr>
-              <th className="px-6 py-4 text-[11px] font-bold text-gray-400 uppercase">Client</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-gray-400 uppercase">Company</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-gray-400 uppercase text-right">Revenue</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-gray-400 uppercase text-center">Status</th>
-              <th className="px-6 py-4"></th>
+              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">
+                Client
+              </th>
+              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">
+                Company
+              </th>
+              <th className="px-6 py-4 text-right text-[11px] font-bold text-slate-400 uppercase">
+                Phone
+              </th>
+              <th className="px-6 py-4 text-center text-[11px] font-bold text-slate-400 uppercase">
+                Status
+              </th>
+              <th className="px-6 py-4 text-right text-[11px] font-bold text-slate-400 uppercase">
+                Actions
+              </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {displayData.map((client) => (
-              <tr key={client.id} className="hover:bg-gray-50/50 transition-colors">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#EEF2FF] text-[#4F46E5] flex items-center justify-center font-bold text-[10px]">
-                      {client.initials}
+          <tbody className="divide-y divide-slate-50">
+            {clients?.length > 0 ? (
+              clients.map((client) => (
+                <tr
+                  key={client.id}
+                  className="transition-colors hover:bg-slate-50/50"
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EEF2FF] text-[10px] font-bold text-[#4F46E5]">
+                        {client.name.substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-slate-900">
+                          {client.name}
+                        </div>
+                        <div className="text-[11px] text-slate-400">
+                          {client.email}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm font-bold text-gray-900">{client.name}</div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{client.company}</td>
-                <td className="px-6 py-4 text-right text-sm font-bold">${client.revenue.toLocaleString()}</td>
-                <td className="px-6 py-4 text-center"><StatusBadge status={client.status} /></td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-gray-400 hover:text-gray-600"><MoreHorizontal size={18} /></button>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {client.company}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm font-bold text-slate-500">
+                    {client.phone}
+                  </td>
+                  <td className="px-6 py-4 text-center">
+                    <StatusBadge status={client.status || "Active"} />
+                  </td>
+                  <td className="px-6 py-4">
+                    <ActionButtons
+                      onEdit={() => onEdit && onEdit(client.id)}
+                      onDelete={() => onDelete && onDelete(client.id)}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="py-20 text-center text-xs font-black tracking-widest text-slate-300 uppercase"
+                >
+                  No Clients Found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
-      </div>
-      
-      {/* Pagination - Simplified for Mobile */}
-      <div className="flex items-center justify-between px-2 md:px-0">
-         <button className="text-xs font-bold text-[#4F46E5] md:hidden">View All</button>
       </div>
     </div>
   );

@@ -1,55 +1,154 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchInvoices } from '../store/slices/invoicesSlice';
-import { Plus, Wallet, CheckCircle2, AlertCircle } from 'lucide-react';
-import Button from "../Components/ui/Button";
-import StatCard from "../Components/ui/StatCard";
-import InvoicesTable from "../Components/InvoicesTable"; 
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInvoices, deleteInvoice, updateInvoice } from "@/store/slices";
+import { Plus, Wallet, CheckCircle2, AlertCircle } from "lucide-react";
+import { useAppNavigation, useCrudModals } from "@/hooks";
+import { PAGINATION } from "@/constants";
+import {
+  Button,
+  StatCard,
+  Pagination,
+  DeleteConfirmModal,
+  EditModal,
+  LoadingState,
+  PageHeader,
+} from "@/components/ui";
+import { InvoicesTable } from "@/components";
+import toast from "react-hot-toast";
 
 const Invoices = () => {
   const dispatch = useDispatch();
-  const { items, isLoading } = useSelector((state) => state.invoices);
+  const { goTo } = useAppNavigation();
+  const { items, pagination, isLoading } = useSelector(
+    (state) => state.invoices,
+  );
+  const [page, setPage] = useState(1);
+  const { deleteModal, editModal } = useCrudModals();
 
+  // Re-fetch invoices on page change
   useEffect(() => {
-    dispatch(fetchInvoices({ page: 1 }));
-  }, [dispatch]);
+    dispatch(fetchInvoices({ page, limit: PAGINATION.LIST }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
-  const stats = {
-    total: items?.reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
-    paid: items?.filter(inv => inv.status === 'paid').reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
-    pending: items?.filter(inv => inv.status === 'pending').reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
-  };
+  // Invoices stats
+  const stats = useMemo(
+    () => ({
+      total: items?.reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
+      paid:
+        items
+          ?.filter((inv) => inv.status === "paid")
+          .reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
+      pending:
+        items
+          ?.filter((inv) => inv.status === "pending")
+          .reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
+    }),
+    [items],
+  );
 
-  if (isLoading) return <div className="p-20 text-center font-black text-brand-accent animate-pulse uppercase tracking-widest">Syncing Data...</div>;
+  if (isLoading) return <LoadingState message="Syncing Invoices..." />;
 
   return (
-    <div className="max-w-[1600px] mx-auto p-4 lg:p-10 animate-in fade-in duration-500">
-      
-      {/* 1. Header */}
-      <div className="lg:flex lg:justify-between lg:items-end mb-10">
-        <div>
-          <h1 className="text-3xl lg:text-5xl font-black  text-indigo-900 tracking-tight">Invoices</h1>
-          <p className="text-muted text-sm mt-2 font-bold uppercase tracking-[0.2em] opacity-60">Revenue Flow</p>
-        </div>
-      <Button 
-  text="Create Invoice" 
-  icon={<Plus size={18} />} 
-  onClick={() => {}}
-  variant="primary" 
-  size="md" 
-  className="mt-8 lg:mt-0" 
-/>
-     </div>
+    <div className="animate-in fade-in mx-auto max-w-400 p-4 duration-500 lg:p-10">
+      <PageHeader
+        title="Invoices"
+        subtitle="Revenue Flow"
+        action={
+          <Button
+            text="Add Invoice"
+            icon={<Plus size={18} />}
+            onClick={() => goTo("/add-invoice")}
+            variant="primary"
+            size="md"
+          />
+        }
+      />
 
-      {/* 2. Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-        <StatCard title="Total Billed" value={stats.total} icon={<Wallet size={22}/>} />
-        <StatCard title="Pending" value={stats.pending} icon={<AlertCircle size={22}/>} variant="danger" />
-        <StatCard title="Net Paid" value={stats.paid} icon={<CheckCircle2 size={22}/>} variant="accent" />
+      {/* Stats row */}
+      <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <StatCard
+          title="Total Billed"
+          value={stats.total.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+          icon={<Wallet size={22} />}
+        />
+        <StatCard
+          title="Pending"
+          value={stats.pending.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+          icon={<AlertCircle size={22} />}
+          isRed
+        />
+        <StatCard
+          title="Net Paid"
+          value={stats.paid.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+          icon={<CheckCircle2 size={22} />}
+        />
       </div>
 
-      <InvoicesTable invoices={items} />
+      {/* Invoices table */}
+      <div className="mb-10 overflow-hidden rounded-[2.5rem] border border-slate-100 bg-white p-4 shadow-sm lg:p-10">
+        <InvoicesTable
+          invoices={items}
+          onEdit={(id) => editModal.open(items.find((i) => i.id === id))}
+          onDelete={(id) => deleteModal.open(items.find((i) => i.id === id))}
+        />
+        {pagination && (
+          <Pagination pagination={pagination} onPageChange={setPage} />
+        )}
+      </div>
 
+      {/* Delete confirmation modal */}
+      <DeleteConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.close}
+        itemName={
+          deleteModal.item
+            ? `Invoice #${deleteModal.item.invoiceId}`
+            : "Invoice"
+        }
+        onConfirm={() => {
+          dispatch(deleteInvoice(deleteModal.item.id))
+            .unwrap()
+            .then(() => {
+              toast.success("Invoice deleted!");
+              deleteModal.close();
+            })
+            .catch((err) => toast.error("Failed to delete: " + err));
+        }}
+      />
+
+      {/* Edit modal */}
+      <EditModal
+        key={editModal.item?.id || "empty"}
+        isOpen={editModal.isOpen}
+        onClose={editModal.close}
+        itemName={
+          editModal.item ? `Invoice #${editModal.item.invoiceId}` : "Invoice"
+        }
+        itemData={editModal.item}
+        onSave={(data) => {
+          const payload = { ...data, amount: parseFloat(data.amount) || 0 };
+          dispatch(
+            updateInvoice({ id: editModal.item.id, updatedData: payload }),
+          )
+            .unwrap()
+            .then(() => {
+              toast.success("Invoice updated!");
+              editModal.close();
+            })
+            .catch((err) => toast.error("Failed to update: " + err));
+        }}
+        readOnlyFields={["clientId", "projectId"]}
+      />
     </div>
   );
 };

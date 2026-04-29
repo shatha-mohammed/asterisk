@@ -1,6 +1,32 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../services/api";
 
+// Decodes and validates the stored JWT token on application startup.
+const getInitialAuth = () => {
+  const token = localStorage.getItem("Asterisk_token");
+  const user = JSON.parse(localStorage.getItem("Asterisk_user"));
+
+  // Basic check for existence
+  if (!token || !user) return { user: null, token: null };
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+
+    // Manually decode the JWT payload to access expiration claim (exp)
+    if (payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("Asterisk_token");
+      localStorage.removeItem("Asterisk_user");
+      return { user: null, token: null };
+    }
+  } catch {
+    // If token is malformed, treat as unauthorized
+    return { user: null, token: null };
+  }
+  return { user, token };
+};
+
+const initialAuth = getInitialAuth();
+
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (credentials, { rejectWithValue }) => {
@@ -34,8 +60,8 @@ export const registerUser = createAsyncThunk(
 );
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("Asterisk_user")) || null,
-  token: localStorage.getItem("Asterisk_token") || null,
+  user: initialAuth.user,
+  token: initialAuth.token,
   isLoading: false,
   error: null,
 };

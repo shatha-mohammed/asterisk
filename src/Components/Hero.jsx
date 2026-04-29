@@ -1,12 +1,12 @@
-import { useAppNavigation } from "../hooks/useAppNavigation";
-import Button from "./ui/Button";
-import heroImage from "../assets/hero.png";
+import { useAppNavigation } from "@/hooks";
+import { Button } from "@/components/ui";
+import heroImage from "@/assets/hero.png";
 
 export default function Hero() {
   const { goToRegister } = useAppNavigation();
 
   return (
-    <div className="my-23 grid grid-cols-1 items-center justify-center gap-12.5 sm:my-0 sm:h-[calc(100vh-64px)] sm:grid-cols-2">
+    <div className="my-23 grid grid-cols-1 items-center justify-center gap-12.5 text-center sm:my-0 sm:h-[calc(100vh-64px)] sm:grid-cols-2 lg:text-left">
       <div className="flex flex-col">
         <h2 className="text-[24px] leading-10 font-bold text-indigo-900 sm:text-[48px] sm:leading-15">
           Scale your freelance business with{" "}
@@ -24,7 +24,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <div className="shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05) w-fit overflow-hidden rounded-2xl p-3 shadow-2xl sm:rotate-3">
+        <div className="w-fit overflow-hidden rounded-2xl p-3 shadow-2xl sm:rotate-3">
           <img src={heroImage} alt="hero photo" className="h-full w-full" />
         </div>
       </div>

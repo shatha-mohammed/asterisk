@@ -1,10 +1,5 @@
-import FeaturesCard from "./ui/FeaturesCard";
-import {
-  LayoutDashboardIcon,
-  ReceiptTextIcon,
-  FolderCode,
-  UsersRound,
-} from "lucide-react";
+import { FeaturesCard } from "../components/ui/";
+import { featuresData } from "../constants";
 
 export default function Features() {
   return (
@@ -22,29 +17,16 @@ export default function Features() {
 
       {/* Cards */}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
-        <FeaturesCard
-          Icon={LayoutDashboardIcon}
-          title="Centralized Workspace"
-          desc="Track your active projects, pending invoices, and monthly revenue in one unified, high-performance dashboard tailored for freelancers."
-        />
-
-        <FeaturesCard
-          Icon={ReceiptTextIcon}
-          title="Financial Control"
-          desc="Generate professional invoices, track daily expenses, and monitor your profit margins effortlessly without touching a spreadsheet."
-        />
-
-        <FeaturesCard
-          Icon={FolderCode}
-          title="Project Mastery"
-          desc="Manage project statuses, set clear deadlines, and keep your client deliverables organized. Never miss a deadline again."
-        />
-
-        <FeaturesCard
-          Icon={UsersRound}
-          title="Client Management"
-          desc="Build a powerful client database with contact details, company info, and project history, all accessible in seconds."
-        />
+        {featuresData.map((f) => {
+          return (
+            <FeaturesCard
+              key={f.title}
+              Icon={f.icon}
+              title={f.title}
+              desc={f.desc}
+            />
+          );
+        })}
       </div>
     </div>
   );

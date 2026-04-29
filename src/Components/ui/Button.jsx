@@ -1,43 +1,49 @@
+import { Loader2 } from "lucide-react";
+
 export default function Button({
   text,
-  onClick,
+  children,
   icon,
+  onClick,
   variant = "primary",
   size = "md",
   className = "",
+  isLoading = false,
   type = "button",
+  disabled,
+  ...props
 }) {
   const sizeStyles = {
-    fit: "px-3 py-1 text-xs",
-    sm: "px-4 py-2 text-xs",
-    md: "px-7 py-3 text-[14px]", 
-    lg: "px-9 py-4 text-base",
+    fit: "",
+    sm: "px-5 py-1 text-xs",
+    md: " px-6 py-1.5 text-[14px]",
+    lg: "px-7 py-2 text-lg",
     full: "w-full py-4 text-base",
   };
 
   const variantStyles = {
-    primary: "bg-[#3525B3] text-white hover:bg-[#2A1D9E] shadow-lg shadow-indigo-100 active:scale-[0.98]",
-    
-    outline: "border-2 border-indigo-50 text-[#3525B3] bg-transparent hover:bg-indigo-50/50 hover:border-indigo-100",
-    
-    danger: "bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-100 active:scale-[0.98]",
-    
-    ghost: "bg-transparent text-slate-500 hover:bg-slate-50 hover:text-[#3525B3]",
-    
-    white: "bg-white text-[#3525B3] hover:bg-slate-50 shadow-md active:scale-[0.98]",
+    primary: "bg-indigo-800 text-white hover:bg-indigo-900 shadow-sm",
+    outline:
+      "border border-indigo-300 text-indigo-900 bg-transparent hover:bg-indigo-50",
+    danger: "bg-red-600 text-white hover:bg-red-700",
+    ghost: "bg-transparent text-indigo-900 hover:bg-slate-100",
+    white: "bg-white text-indigo-900 hover:bg-indigo-100",
   };
 
   const baseStyles =
-    "flex items-center justify-center gap-2.5 rounded-2xl font-bold transition-all duration-300 cursor-pointer focus:outline-none disabled:opacity-50 disabled:pointer-events-none tracking-wide";
+    "flex items-center justify-center gap-2 rounded-lg font-medium transition-all cursor-pointer focus:outline-none disabled:opacity-50 disabled:pointer-events-none font-sans";
 
   return (
     <button
       type={type}
       onClick={onClick}
+      disabled={isLoading || disabled}
       className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
+      {...props}
     >
-      {icon && <span className="transition-transform duration-300 group-hover:scale-110">{icon}</span>}
-      <span className="leading-none">{text}</span>
+      {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
+      {icon && !isLoading && <span className="flex items-center justify-center">{icon}</span>}
+      {(children || text) && <span>{children || text}</span>}
     </button>
   );
 }

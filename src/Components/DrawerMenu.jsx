@@ -34,14 +34,15 @@ export default function DrawerMenu({ isOpen, setIsOpen, navLinks }) {
               key={link.name}
               to={link.path}
               className={({ isActive }) =>
-                `transition-all duration-300 ${
+                `flex items-center justify-start gap-3 pl-3 transition-all duration-300 ${
                   isActive
-                    ? "relative rounded-lg bg-indigo-900/20 py-2 pl-5 font-bold text-indigo-900"
+                    ? "relative rounded-lg bg-indigo-900/20 py-2 font-bold text-indigo-900"
                     : "text-slate-500 hover:text-indigo-900"
                 }`
               }
               onClick={() => setIsOpen(false)}
             >
+              <link.icon size={18} />
               {link.name}
             </NavLink>
           ))}

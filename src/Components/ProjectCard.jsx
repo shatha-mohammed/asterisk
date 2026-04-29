@@ -1,73 +1,97 @@
-import React from 'react';
-import { MoreVertical, Calendar, DollarSign, Clock } from 'lucide-react';
+import { Calendar, DollarSign, Clock } from "lucide-react";
+import { ActionButtons } from "@/components/ui";
 
-const ProjectCard = ({ project }) => {
-  const { 
-    name = "Untitled Project", 
-    client = "General Client", 
-    budget = "0.00", 
-    deadline = "No deadline", 
-    status = "Active" 
+export default function ProjectCard({ project, onEdit, onDelete }) {
+  const {
+    name = "Untitled Project",
+    client = "Client",
+    budget = "0.00",
+    deadline = "No deadline",
+    status = "active",
+    updatedAt,
   } = project || {};
 
+  // calculte the day
+  const getDaysAgo = (dateString) => {
+    if (!dateString) return "Updated recently";
+    const diffTime = Math.abs(new Date() - new Date(dateString));
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return "Updated today";
+    return `Last active ${diffDays}d ago`;
+  };
+
   return (
-    <div className="bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm shadow-indigo-100/10 hover:shadow-md hover:border-indigo-100 transition-all group">
-      {/* Header: Name and Action */}
-      <div className="flex justify-between items-start mb-6">
+    <div className="group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm shadow-indigo-100/10 transition-all hover:border-indigo-100 hover:shadow-md">
+      {/* Name and Action */}
+      <div className="mb-6 flex items-start justify-between">
         <div className="flex gap-3">
-          <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-[#3525B3] group-hover:bg-[#3525B3] group-hover:text-white transition-colors duration-300">
-            <span className="font-black text-lg">{name.charAt(0).toUpperCase()}</span>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-[#3525B3] transition-colors duration-300 group-hover:bg-[#3525B3] group-hover:text-white">
+            <span className="text-lg font-black uppercase">
+              {name.charAt(0)}
+            </span>
           </div>
           <div>
-            <h3 className="font-bold text-slate-800 text-lg leading-tight group-hover:text-[#3525B3] transition-colors">{name}</h3>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider mt-1">{client}</p>
+            <h3 className="text-lg leading-tight font-bold text-slate-800 transition-colors group-hover:text-[#3525B3]">
+              {name}
+            </h3>
+            <p className="mt-1 text-xs font-bold tracking-wider text-slate-400 uppercase">
+              {client}
+            </p>
           </div>
         </div>
-      <Button 
-  variant="ghost" 
-  size="fit" 
-  icon={<MoreVertical size={20} />} 
-  className="!text-slate-300 hover:!text-slate-600 !p-2"
-  onClick={() => console.log('Open menu')}
-/>
+        <ActionButtons onEdit={onEdit} onDelete={onDelete} />
       </div>
 
-      {/* Body: Stats */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      {/* Stats */}
+      <div className="mb-6 grid grid-cols-2 gap-4">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+          <div className="rounded-lg bg-slate-50 p-2 text-slate-400">
             <DollarSign size={14} />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Budget</p>
-            <p className="text-sm font-bold text-slate-700">${budget}</p>
+            <p className="text-[10px] font-black tracking-widest text-slate-300 uppercase">
+              Budget
+            </p>
+            <p className="text-sm font-bold text-slate-700">
+              $
+              {budget.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+          <div className="rounded-lg bg-slate-50 p-2 text-slate-400">
             <Calendar size={14} />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Deadline</p>
+            <p className="text-[10px] font-black tracking-widest text-slate-300 uppercase">
+              Deadline
+            </p>
             <p className="text-sm font-bold text-slate-700">{deadline}</p>
           </div>
         </div>
       </div>
 
-      {/* Footer: Progress & Status */}
-      <div className="pt-5 border-t border-slate-50 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-slate-400 font-bold text-[10px] uppercase tracking-widest">
+      {/* Status */}
+      <div className="flex items-center justify-between border-t border-slate-50 pt-5">
+        <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
           <Clock size={14} />
-          <span>Last active 2d ago</span>
+          <span>{getDaysAgo(updatedAt)}</span>
         </div>
-        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
-          status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-500'
-        }`}>
-          {status}
+        <span
+          className={`rounded-full px-3 py-1 text-[10px] font-black tracking-widest uppercase ${
+            status === "active"
+              ? "bg-emerald-50 text-emerald-600"
+              : status === "done"
+                ? "bg-blue-50 text-blue-600"
+                : "bg-amber-50 text-amber-600"
+          }`}
+        >
+          {status === "done" ? "completed" : status}
         </span>
       </div>
     </div>
   );
-};
-
-export default ProjectCard;
+}

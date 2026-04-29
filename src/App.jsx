@@ -1,44 +1,77 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import MainLayout from "./layout/MainLayout";
-import AppLayout from "./layout/AppLayout"; 
-import Home from "./pages/Home";
-import Pricing from "./pages/Pricing";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard.jsx"; 
-import Reports from "./pages/Reports";
-import Invoices from "./pages/Invoices"; 
-import Expenses from './pages/Expenses'; 
-import ClientsPage from './pages/ClientsPage';
-import AddProjectPage from './pages/AddProjectPage';
+import { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Toaster } from "react-hot-toast";
+
+import { setOnUnauthorized } from "@/services/api";
+import { logout } from "@/store/slices";
+import { ProtectedRoute } from "@/components";
+import {
+  AboutPage,
+  AddClientPage,
+  AddExpensePage,
+  AddInvoicePage,
+  AddProjectPage,
+  ClientsPage,
+  Contact,
+  Dashboard,
+  Earnings,
+  Expenses,
+  Home,
+  Invoices,
+  Login,
+  ProjectsPage,
+  Register,
+  Settings,
+} from "@/pages";
+import { AppLayout, AuthLayout, MainLayout } from "@/layout";
 
 export default function App() {
-  return (
-    <Routes>
-      {/* المسارات العامة - Landing Page */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Route>
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-      {/* مسارات التطبيق - بعد تسجيل الدخول */}
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/invoices" element={<Invoices />} />
-        <Route path="/expenses" element={<Expenses />} /> 
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/clients" element={<ClientsPage />} />
-        <Route path="/projects" element={<AddProjectPage />} />
-        <Route path="/add-project" element={<AddProjectPage />} />
-        {/* توجيه أي مسار خطأ داخل الـ App إلى الداشبورد */}
-        <Route path="/app" element={<Navigate to="/dashboard" replace />} />
+  // The 401 interceptor — dispatches logout and redirects to login
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      dispatch(logout());
+      navigate("/login", { replace: true });
+    });
+  }, [navigate, dispatch]);
+
+  return (
+    <>
+      <Toaster position="top-right" />
+      <Routes>
+        {/* Public pages */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
-          {/* توجيه عام لأي مسار غير معروف */}
-         <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+
+        {/* Auth pages */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+
+        {/* Protected pages */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/invoices" element={<Invoices />} />
+            <Route path="/add-invoice" element={<AddInvoicePage />} />
+            <Route path="/earnings" element={<Earnings />} />
+            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/add-expense" element={<AddExpensePage />} />
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/add-client" element={<AddClientPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/add-project" element={<AddProjectPage />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }

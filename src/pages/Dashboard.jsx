@@ -26,7 +26,6 @@ export default function Dashboard() {
   } = useSelector((state) => state.projects);
   const { items: invoices } = useSelector((state) => state.invoices);
   const { items: clients } = useSelector((state) => state.clients);
-  const { items: expenses } = useSelector((state) => state.expenses);
   const [chartRange, setChartRange] = useState("6M");
 
   // Always re-fetch on mount to avoid stale data after CRUD operations

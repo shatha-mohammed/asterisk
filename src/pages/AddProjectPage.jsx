@@ -21,6 +21,7 @@ const AddProjectPage = () => {
     title: "",
     clientId: "",
     budget: "",
+    commission: "",
     dueDate: "",
   });
 
@@ -40,6 +41,7 @@ const AddProjectPage = () => {
     const payload = {
       ...formData,
       budget: parseFloat(formData.budget) || 0,
+      commission: parseInt(formData.commission),
       dueDate: formData.dueDate
         ? new Date(formData.dueDate).toISOString()
         : null,
@@ -63,13 +65,12 @@ const AddProjectPage = () => {
             <ProjectIdentity formData={formData} onChange={handleChange} />
             <ProjectLogistics formData={formData} onChange={handleChange} />
           </div>
-          <div>
-            <ProjectCommercials
-              formData={formData}
-              onChange={handleChange}
-              clients={clients || []}
-            />
-          </div>
+
+          <ProjectCommercials
+            formData={formData}
+            onChange={handleChange}
+            clients={clients || []}
+          />
         </div>
 
         <FormActions submitLabel="Add Project" isLoading={isLoading} />

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, clearError } from "../store/slices/authSlice";
-import { useAppNavigation } from "../hooks/useAppNavigation";
 import { Link } from "react-router-dom";
-import { supabase } from "../services/supabaseClient";
-import Input from "../components/ui/Input";
-import Button from "../components/ui/Button";
-import AuthFooter from "../components/AuthFooter";
-import AuthRedirect from "../components/AuthRedirect";
+import toast from "react-hot-toast";
+
+import { registerUser, clearError } from "@/store/slices";
+import { supabase } from "@/services/supabaseClient";
+import { useAppNavigation } from "@/hooks";
+import { Input, Button } from "@/components/ui";
+import { AuthFooter, AuthRedirect } from "@/components";
+import { Header } from "@/layout";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -22,21 +23,34 @@ export default function Register() {
   const [avatarFile, setAvatarFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (user) goToDashboard();
   }, [user, goToDashboard]);
 
+  // Clear any previous error when the user starts typing
   const handleChange = (e) => {
     if (error) dispatch(clearError());
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Upload avatar
   const handleFileChange = (e) => {
     if (error) dispatch(clearError());
     const file = e.target.files[0];
-    if (file) setAvatarFile(file);
+    if (!file) return;
+
+    // Set max avatar size = 2MB
+    const MAX_SIZE_MB = 2;
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      toast.error(`File too large. Maximum size is ${MAX_SIZE_MB}MB.`);
+      e.target.value = "";
+      return;
+    }
+    setAvatarFile(file);
   };
 
+  // Submit form action
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,16 +60,20 @@ export default function Register() {
       if (avatarFile) {
         setIsUploading(true);
 
+        // Rename the avatar with a unique name
         const fileExt = avatarFile.name.split(".").pop();
         const fileName = `${Date.now()}-${Math.round(Math.random() * 10000)}.${fileExt}`;
         const filePath = fileName;
 
+        // upload the photo
         const { error: uploadError } = await supabase.storage
           .from("profiles")
           .upload(filePath, avatarFile);
 
+        // stop if there is an error
         if (uploadError) throw uploadError;
 
+        // get the public url for avatar
         const { data } = supabase.storage
           .from("profiles")
           .getPublicUrl(filePath);
@@ -64,11 +82,13 @@ export default function Register() {
         setIsUploading(false);
       }
 
+      // collect the form data with avatar
       const payload = {
         ...formData,
         avatarUrl: finalAvatarUrl,
       };
 
+      // dispatch the register
       await dispatch(registerUser(payload)).unwrap();
     } catch (err) {
       setIsUploading(false);
@@ -78,7 +98,11 @@ export default function Register() {
 
   return (
     <div className="w-full">
-      {/* Header */}
+      <div className="lg:hidden">
+        <Header />
+        <div className="h-16"></div>
+      </div>
+
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-indigo-800">
           Create an account
@@ -167,7 +191,7 @@ export default function Register() {
         </Button>
       </form>
 
-      {/* Login */}
+      {/* Redirect to login page */}
       <AuthRedirect
         text="Already have an account?"
         to="/login"

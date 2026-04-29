@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useAppNavigation } from "../hooks/useAppNavigation";
-import Button from "../Components/ui/Button";
-import Logo from "../Components/ui/Logo";
-import DrawerMenu from "../Components/DrawerMenu";
+import { useAppNavigation } from "@/hooks";
+import { Button, Logo } from "@/components/ui";
+import { DrawerMenu } from "@/components";
+import { House, Info, Phone } from "lucide-react";
 
 const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "Pricing", path: "/pricing" },
-  { name: "About", path: "/about" },
+  { icon: House, name: "Home", path: "/" },
+  { icon: Info, name: "About", path: "/about" },
+  { icon: Phone, name: "Contact", path: "/contact" },
 ];
 
 export default function Header() {

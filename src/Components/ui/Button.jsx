@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 export default function Button({
   text,
   children,
+  icon,
   onClick,
   variant = "primary",
   size = "md",
@@ -14,10 +15,10 @@ export default function Button({
 }) {
   const sizeStyles = {
     fit: "",
-    sm: "px-5 py-0.5 text-xs",
-    md: " px-6 py-1 text-[14px]",
-    lg: "px-7 py-1.5 text-lg",
-    full: "w-full py-3 text-base",
+    sm: "px-5 py-1 text-xs",
+    md: " px-6 py-1.5 text-[14px]",
+    lg: "px-7 py-2 text-lg",
+    full: "w-full py-4 text-base",
   };
 
   const variantStyles = {
@@ -30,7 +31,7 @@ export default function Button({
   };
 
   const baseStyles =
-    "flex items-center justify-center rounded-lg font-medium transition-all cursor-pointer focus:outline-none disabled:opacity-50 disabled:pointer-events-none font-sans";
+    "flex items-center justify-center gap-2 rounded-lg font-medium transition-all cursor-pointer focus:outline-none disabled:opacity-50 disabled:pointer-events-none font-sans";
 
   return (
     <button
@@ -41,8 +42,8 @@ export default function Button({
       {...props}
     >
       {isLoading && <Loader2 className="mr-2 h-5 w-5 animate-spin" />}
-
-      {children || text}
+      {icon && !isLoading && <span className="flex items-center justify-center">{icon}</span>}
+      {(children || text) && <span>{children || text}</span>}
     </button>
   );
 }

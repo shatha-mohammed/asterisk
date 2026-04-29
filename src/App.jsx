@@ -1,32 +1,77 @@
-import { Routes, Route } from "react-router-dom";
-import MainLayout from "./layout/MainLayout";
-import Home from "./pages/Home";
-import Pricing from "./pages/Pricing";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Toaster } from "react-hot-toast";
+
+import { setOnUnauthorized } from "@/services/api";
+import { logout } from "@/store/slices";
+import { ProtectedRoute } from "@/components";
+import {
+  AboutPage,
+  AddClientPage,
+  AddExpensePage,
+  AddInvoicePage,
+  AddProjectPage,
+  ClientsPage,
+  Contact,
+  Dashboard,
+  Earnings,
+  Expenses,
+  Home,
+  Invoices,
+  Login,
+  ProjectsPage,
+  Register,
+  Settings,
+} from "@/pages";
+import { AppLayout, AuthLayout, MainLayout } from "@/layout";
 
 export default function App() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // The 401 interceptor — dispatches logout and redirects to login
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      dispatch(logout());
+      navigate("/login", { replace: true });
+    });
+  }, [navigate, dispatch]);
+
   return (
-    // <div className="px-4 lg:px-24">
-    //   <Header />
-    //   <div className="h-16"></div>
-    //   <Routes>
-    //     <Route path="/" element={<Home />}></Route>
-    //     <Route path="/pricing" element={<Pricing />}></Route>
-    //     <Route path="/about" element={<About />}></Route>
-    //   </Routes>
-    // </div>
+    <>
+      <Toaster position="top-right" />
+      <Routes>
+        {/* Public pages */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
+        </Route>
 
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/about" element={<About />} />
-      </Route>
+        {/* Auth pages */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-    </Routes>
+        {/* Protected pages */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/invoices" element={<Invoices />} />
+            <Route path="/add-invoice" element={<AddInvoicePage />} />
+            <Route path="/earnings" element={<Earnings />} />
+            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/add-expense" element={<AddExpensePage />} />
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/add-client" element={<AddClientPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/add-project" element={<AddProjectPage />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }

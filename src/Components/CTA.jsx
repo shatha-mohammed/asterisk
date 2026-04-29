@@ -1,5 +1,5 @@
-import { useAppNavigation } from "../hooks/useAppNavigation";
-import Button from "./ui/Button";
+import { useAppNavigation } from "@/hooks";
+import { Button } from "@/components/ui";
 
 export default function CTA() {
   const { goToRegister } = useAppNavigation();
@@ -16,7 +16,7 @@ export default function CTA() {
         text="Get Started"
         variant="white"
         size="full"
-        className="max-w-40"
+        className="md:max-w-40"
         onClick={goToRegister}
       />
     </div>

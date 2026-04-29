@@ -1,185 +1,218 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Briefcase, FileText, Plus, DollarSign } from 'lucide-react';
-import { fetchProjects } from '../store/slices/projectsSlice';
-import { fetchInvoices } from '../store/slices/invoicesSlice';
-import Button from "../Components/ui/Button";
-import StatCard from "../Components/ui/StatCard";
-import ProjectCard from "../Components/ProjectCard";
-import InvoicesTable from "../Components/InvoicesTable"; // استدعينا الجدول المشترك
+// Dashboard.jsx — Main overview page showing stats, revenue chart, invoices, and projects.
+
+import { useEffect, useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Briefcase, FileText, Plus, DollarSign } from "lucide-react";
+
+import {
+  fetchProjects,
+  fetchInvoices,
+  fetchClients,
+  fetchExpenses,
+} from "@/store/slices";
+import { TAX_RATE, PAGINATION } from "@/constants";
+import { useAppNavigation } from "@/hooks";
+import { Button, StatCard, PageHeader, LoadingState } from "@/components/ui";
+import { ProjectCard, InvoicesTable, RevenueChart } from "@/components";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  
-  const { user } = useSelector(state => state.auth);
-  const { items: projects, isLoading: projectsLoading } = useSelector(state => state.projects);
-  const { items: invoices } = useSelector(state => state.invoices);
+  const { goTo } = useAppNavigation();
+  const { user } = useSelector((state) => state.auth);
+  const {
+    items: projects,
+    isLoading,
+    error,
+  } = useSelector((state) => state.projects);
+  const { items: invoices } = useSelector((state) => state.invoices);
+  const { items: clients } = useSelector((state) => state.clients);
+  const { items: expenses } = useSelector((state) => state.expenses);
+  const [chartRange, setChartRange] = useState("6M");
 
+  // Always re-fetch on mount to avoid stale data after CRUD operations
   useEffect(() => {
-    dispatch(fetchProjects({ page: 1 }));
-    dispatch(fetchInvoices({ page: 1 }));
-  }, [dispatch]);
+    dispatch(fetchProjects({ page: 1, limit: PAGINATION.DASHBOARD }));
+    // Fetch ALL invoices and expenses so the Total Earnings stat is globally accurate
+    dispatch(fetchInvoices({ page: 1, limit: PAGINATION.ALL }));
+    dispatch(fetchExpenses({ page: 1, limit: PAGINATION.ALL }));
+    dispatch(fetchClients({ page: 1, limit: PAGINATION.ALL }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const stats = {
-    earnings: invoices?.reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0,
-    activeCount: projects?.filter(p => p.status === 'active').length || 0,
-    pendingInvoices: invoices?.filter(inv => inv.status === 'pending').length || 0
-  };
+  // Creates an lookup map for clients to prevent nested loop performance bottlenecks during rendering.
+  const clientMap = useMemo(() => {
+    const map = new Map();
+    clients?.forEach((c) => map.set(c.id, c));
+    return map;
+  }, [clients]);
 
-  if (projectsLoading) return (
-    <div className="p-20 text-center font-black animate-pulse text-brand-accent uppercase tracking-[0.3em]">
-      Initializing Asterisk...
-    </div>
-  );
+  // Calculate dashboard stats only when invoices, projects, or expenses change
+  const stats = useMemo(() => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Only include paid invoices from this month
+    const thisMonthPaidInvoices =
+      invoices?.filter((inv) => {
+        if (inv.status !== "paid") return false;
+        return new Date(inv.date || inv.createdAt) >= startOfMonth;
+      }) || [];
+
+    const gross = thisMonthPaidInvoices.reduce(
+      (acc, inv) => acc + (inv.amount || 0),
+      0,
+    );
+
+    // Only include expenses from this month
+    const thisMonthExpenses =
+      expenses?.filter((exp) => {
+        return new Date(exp.date) >= startOfMonth;
+      }) || [];
+
+    const totalExpenses = thisMonthExpenses.reduce(
+      (acc, exp) => acc + (exp.amount || 0),
+      0,
+    );
+
+    return {
+      earnings: gross * (1 - TAX_RATE) - totalExpenses,
+      activeCount: projects?.filter((p) => p.status === "active").length || 0,
+      pendingInvoices:
+        invoices?.filter((inv) => inv.status === "pending").length || 0,
+    };
+  }, [invoices, projects, expenses]);
+
+  if (isLoading) return <LoadingState message="Initializing Asterisk..." />;
+
+  if (error)
+    return (
+      <div className="flex flex-col items-center justify-center p-20 text-center">
+        <p className="mb-4 text-2xl font-black text-red-500">
+          Something went wrong
+        </p>
+        <p className="text-muted text-sm">{error}</p>
+        <Button
+          text="Try Again"
+          onClick={() => window.location.reload()}
+          className="mt-6"
+        />
+      </div>
+    );
 
   return (
-    <div className="max-w-[1600px] mx-auto p-4 lg:p-10 animate-in fade-in duration-500">
-      
-      {/* 1. Header  */}
-      <div className="mb-12 lg:flex lg:justify-between lg:items-end">
-        <div>
-          <h1 className="text-3xl lg:text-6xl font-black text-[#1E293B] tracking-tight">
-            Hi, {user?.name?.split(' ')[0] || 'Designer'}!
-          </h1>
-          <p className="text-muted text-sm mt-3 font-bold uppercase tracking-[0.25em] opacity-60">
-            Freelancer Flow Overview
-          </p>
-        </div>
-        <div className="mt-8 lg:mt-0">
-          <Button 
-            text="Start New Project" 
-            icon={<Plus size={20} />} 
-            onClick={() => {}} 
+    <div className="animate-in fade-in mx-auto max-w-400 p-4 duration-500 lg:p-10">
+      <PageHeader
+        title={`Hi, ${user?.name?.split(" ")[0] || "Designer"}!`}
+        subtitle="Freelancer Flow Overview"
+        action={
+          <Button
+            text="Add New Project"
+            icon={<Plus size={20} />}
+            onClick={() => goTo("/add-project")}
           />
-        </div>
+        }
+      />
+
+      {/* Stat cards */}
+      <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+        <StatCard
+          title="Active Projects"
+          value={stats.activeCount}
+          trend="In progress"
+          icon={<Briefcase size={22} />}
+        />
+        <StatCard
+          title="This Month's Earnings"
+          // Formats the earnings as currency with thousand separators and exactly 2 decimal places.
+          value={`$${stats.earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          trend="Net collected"
+          icon={<DollarSign size={22} />}
+        />
+        <StatCard
+          title="Pending"
+          value={stats.pendingInvoices}
+          trend="Follow-ups"
+          icon={<FileText size={22} />}
+          isRed
+        />
       </div>
 
-      {/* 2. شريط الإحصائيات الموحد */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        <StatCard title="Active Work" value={stats.activeCount} trend="Projects in progress" icon={<Briefcase size={22}/>} />
-        <StatCard title="Total Earnings" value={`$${stats.earnings.toLocaleString()}`} trend="Net collected" icon={<DollarSign size={22}/>} />
-        <StatCard title="Pending" value={stats.pendingInvoices} trend="Payment follow-ups" icon={<FileText size={22}/>} isRed />
-      </div>
-
-      {/* 3. التحليلات والنشاطات */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
-        
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2 bg-white rounded-[3rem] border border-slate-50 shadow-sm p-10 lg:p-12">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h3 className="text-xl font-black text-[#1E293B] tracking-tight">Revenue Growth</h3>
-              <p className="text-[10px] text-muted font-black uppercase tracking-widest opacity-50">Performance metrics</p>
-            </div>
-            <div className="bg-slate-50 p-2 rounded-2xl flex gap-2">
-<Button 
-  text="6M" 
-  variant="white" 
-  size="md" 
-  className="!py-2.5 !px-6 text-[10px] font-black" 
-  onClick={() => {}} 
-/>
-
-<Button 
-  text="1Y" 
-  variant="ghost" 
-  size="md" 
-  className="!py-2.5 !px-6 text-[10px] font-black opacity-40 hover:opacity-100" 
-  onClick={() => {}} 
-/>
-            </div>
+      {/* Revenue chart */}
+      <div className="mb-16 rounded-[3rem] border border-slate-50 bg-white p-10 shadow-sm lg:p-12">
+        <div className="mb-12 flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-black tracking-tight text-indigo-900">
+              Revenue Growth
+            </h3>
+            <p className="text-muted/50 text-[10px] font-black tracking-widest uppercase">
+              Performance metrics
+            </p>
           </div>
-          
-          <div className="h-[300px] flex items-end justify-between gap-6 px-2 border-b border-slate-50/50">
-            {[
-              { m: 'Jan', h: '40%' }, { m: 'Feb', h: '65%' }, { m: 'Mar', h: '45%' },
-              { m: 'Apr', h: '80%' }, { m: 'May', h: '100%', active: true }, { m: 'Jun', h: '70%' }
-            ].map((item, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-6 group h-full justify-end">
-                <div 
-                  style={{ height: item.h }} 
-                  className={`w-full max-w-[45px] rounded-t-2xl transition-all duration-700 
-                    ${item.active ? 'bg-brand-accent shadow-2xl shadow-indigo-100' : 'bg-slate-50 group-hover:bg-indigo-50/50'}`}
-                ></div>
-                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-[-35px]">
-                  {item.m}
-                </span>
-              </div>
+          <div className="flex gap-2 rounded-2xl bg-slate-50 p-2">
+            {["6M", "1Y"].map((r) => (
+              <Button
+                key={r}
+                text={r}
+                size="md"
+                onClick={() => setChartRange(r)}
+                variant={chartRange === r ? "white" : "ghost"}
+                className={`m-0! p-0! text-[10px] font-black max-md:w-fit! md:px-6! md:py-2.5! ${chartRange !== r && "opacity-40"}`}
+              />
             ))}
           </div>
         </div>
-
-        {/* Recent Activity  */}
-        <div className="bg-white rounded-[3rem] border border-slate-50 shadow-sm p-10 flex flex-col">
-          <h3 className="text-xl font-black text-[#1E293B] mb-12 tracking-tight">Recent Activity</h3>
-          <div className="space-y-12 flex-1">
-            <ActivityItem color="bg-emerald-500" title="Payment" sub="Invoice #4420 paid" />
-            <ActivityItem color="bg-brand-accent" title="Project" sub="Asterisk UI Phase 1" />
-            <ActivityItem color="bg-amber-500" title="System" sub="Cloud sync completed" />
-          </div>
-<Button 
-  text="VIEW FEED" 
-  variant="ghost" 
-  size="full" 
-  className="mt-12 tracking-[0.3em] text-[9px] font-black opacity-40 hover:opacity-100 transition-all" 
-  onClick={() => {}} 
-/>        </div>
+        <RevenueChart invoices={invoices} range={chartRange} />
       </div>
 
-      {/* 4. Recent Invoices */}
-      <section className="mb-16">
-        <div className="flex justify-between items-center mb-8 px-4">
-          <h2 className="text-2xl font-black text-[#1E293B] tracking-tight">Recent Invoices</h2>
-<Button 
-  text="Go to billing" 
-  variant="ghost" 
-  size="sm" 
-  className="text-[10px] tracking-[0.2em] text-brand-accent font-black" 
-  onClick={() => goTo('/invoices')} 
-/>        </div>
-        <InvoicesTable invoices={invoices?.slice(0, 4)} />
-      </section>
-
-      {/* 5. Projects Section */}
-      <section>
-        <div className="flex justify-between items-center mb-8 px-4">
-          <h2 className="text-2xl font-black text-[#1E293B] tracking-tight">Active Projects</h2>
-<Button 
-  text="View all" 
-  variant="ghost" 
-  size="sm" 
-  className="text-[10px] tracking-[0.2em]" 
-  onClick={() => {}} 
-/>        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {projects?.length > 0 ? (
-            projects.slice(0, 3).map((p) => (
-              <ProjectCard 
-                key={p.id}
-                title={p.title} 
-                progress={p.status === 'done' ? 100 : 65} 
-                category="CREATIVE" 
-                client={p.clientId || "Direct Client"} 
-                color="bg-brand-accent" 
-              />
-            ))
-          ) : (
-            <div className="col-span-3 p-24 text-center bg-white rounded-[3rem] border border-dashed border-slate-100">
-               <p className="text-slate-300 font-black uppercase tracking-[0.4em] text-[10px]">No active pipeline</p>
-            </div>
-          )}
+      {/* Recent invoices */}
+      <div className="mb-16">
+        <div className="mb-8 flex items-center justify-between px-4">
+          <h2 className="text-2xl font-black tracking-tight text-indigo-900">
+            Recent Invoices
+          </h2>
+          <Button
+            text="View All"
+            variant="ghost"
+            size="sm"
+            onClick={() => goTo("/invoices")}
+            className="text-brand-accent text-[10px] font-black tracking-[0.2em]"
+          />
         </div>
-      </section>
+        <InvoicesTable invoices={invoices?.slice(0, 4)} />
+      </div>
+
+      {/* Active projects */}
+      <div>
+        <div className="mb-8 flex items-center justify-between px-4">
+          <h2 className="text-2xl font-black tracking-tight text-indigo-900">
+            Active Projects
+          </h2>
+          <Button
+            text="View all"
+            variant="ghost"
+            size="sm"
+            onClick={() => goTo("/projects")}
+            className="text-[10px] tracking-[0.2em]"
+          />
+        </div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          {projects?.slice(0, 3).map((p) => (
+            <ProjectCard
+              key={p.id}
+              project={{
+                name: p.title,
+                client: clientMap.get(p.clientId)?.name || "Client",
+                budget: p.budget || "0.00",
+                deadline: p.dueDate
+                  ? new Date(p.dueDate).toLocaleDateString("en-GB")
+                  : "No deadline",
+                status: p.status || "active",
+                updatedAt: p.updatedAt,
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
-
-const ActivityItem = ({ color, title, sub }) => (
-  <div className="flex gap-6 group cursor-default items-start">
-    <div className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ${color} shadow-sm group-hover:scale-[1.4] transition-all duration-300`}></div>
-    <div>
-      <h4 className="text-sm font-black text-[#1E293B] tracking-tight leading-none mb-2">{title}</h4>
-      <p className="text-[10px] text-muted font-bold opacity-40 uppercase tracking-wider">{sub}</p>
-    </div>
-  </div>
-);

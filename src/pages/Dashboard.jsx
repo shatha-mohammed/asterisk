@@ -138,7 +138,7 @@ export default function Dashboard() {
       </div>
 
       {/* Revenue chart */}
-      <div className="mb-16 rounded-[3rem] border border-slate-50 bg-white p-10 shadow-sm lg:p-12">
+      <div className="mb-16 overflow-hidden rounded-[3rem] border border-slate-50 bg-white p-10 shadow-sm lg:p-12">
         <div className="mb-12 flex items-center justify-between">
           <div>
             <h3 className="text-xl font-black tracking-tight text-indigo-900">

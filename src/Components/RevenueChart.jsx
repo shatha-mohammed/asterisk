@@ -27,7 +27,7 @@ export default function RevenueChart({ invoices = [], range = "6M" }) {
         currentDate.getMonth() - i,
         1,
       );
-      monthsData.push({
+      monthsData.unshift({
         monthIndex: d.getMonth(),
         year: d.getFullYear(),
         label: monthNames[d.getMonth()],
@@ -78,22 +78,22 @@ export default function RevenueChart({ invoices = [], range = "6M" }) {
   }, [invoices, range]);
 
   return (
-    <div className="flex h-64 w-full items-end justify-between gap-2 overflow-x-auto border-b border-slate-100 px-2 pb-6 md:gap-6 md:overflow-hidden">
+    <div className="flex h-64 w-full items-end justify-between gap-1 overflow-x-auto border-b border-slate-100 px-2 pb-6 md:gap-6">
       {chartData.map((item, i) => (
         <div
           key={i}
           title={`Total: $${item.totalAmount.toLocaleString()}`}
-          className="group flex h-full min-w-8 flex-1 cursor-pointer flex-col items-center justify-end gap-3 md:min-w-0"
+          className="group flex h-full flex-1 cursor-pointer flex-col items-center justify-end gap-3"
         >
           <div
             style={{ height: item.h }}
-            className={`w-full max-w-12 rounded-t-lg transition-all duration-700 md:rounded-t-2xl ${
+            className={`w-10 rounded-t-lg transition-all duration-700 md:w-12 md:rounded-t-2xl ${
               item.active
                 ? "bg-brand-accent shadow-xl shadow-indigo-100"
                 : "bg-slate-100 group-hover:bg-indigo-50"
             }`}
           ></div>
-          <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase">
+          <span className="text-[10px] font-black tracking-tight text-slate-400 uppercase md:tracking-widest">
             {item.m}
           </span>
         </div>

@@ -1,36 +1,8 @@
 import { Outlet } from "react-router-dom";
-import {
-  Asterisk,
-  LayoutDashboardIcon,
-  ReceiptTextIcon,
-  FolderCode,
-  UsersRound,
-} from "lucide-react";
+import { featuresData } from "../constants";
+import { Asterisk } from "lucide-react";
 
 export default function AuthLayout() {
-  const featuresData = [
-    {
-      icon: LayoutDashboardIcon,
-      title: "Centralized Workspace",
-      desc: "Track your active projects, pending invoices, and monthly revenue in one unified, high-performance dashboard tailored for freelancers.",
-    },
-    {
-      icon: ReceiptTextIcon,
-      title: "Financial Control",
-      desc: "Generate professional invoices, track daily expenses, and monitor your profit margins effortlessly without touching a spreadsheet.",
-    },
-    {
-      icon: FolderCode,
-      title: "Project Mastery",
-      desc: "Manage project statuses, set clear deadlines, and keep your client deliverables organized. Never miss a deadline again.",
-    },
-    {
-      icon: UsersRound,
-      title: "Client Management",
-      desc: "Build a powerful client database with contact details, company info, and project history, all accessible in seconds.",
-    },
-  ];
-
   return (
     <div className="flex min-h-screen w-full bg-white">
       <div className="hidden w-1/2 flex-col justify-between bg-indigo-800 p-12 text-white lg:flex">

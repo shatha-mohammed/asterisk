@@ -3,7 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addProject, fetchClients } from "@/store/slices";
 import { PAGINATION } from "@/constants";
-import { FormHeader, FormActions } from "@/components/ui";
+import {
+  FormHeader,
+  FormActions,
+  EmptyState,
+  LoadingState,
+} from "@/components/ui";
 import {
   ProjectIdentity,
   ProjectCommercials,
@@ -14,8 +19,12 @@ import toast from "react-hot-toast";
 const AddProjectPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items: clients } = useSelector((state) => state.clients);
-  const { isLoading } = useSelector((state) => state.projects);
+  const { items: clients, isLoading: clientsLoading } = useSelector(
+    (state) => state.clients,
+  );
+  const { isLoading: projectsLoading } = useSelector((state) => state.projects);
+  // If we already have clients in Redux, mark the initial fetch as done immediately
+  const [initialFetchDone, setInitialFetchDone] = useState(!!clients?.length);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -27,8 +36,11 @@ const AddProjectPage = () => {
 
   // Fetch ALL clients so the client dropdown is fully populated
   useEffect(() => {
-    if (!clients?.length)
-      dispatch(fetchClients({ page: 1, limit: PAGINATION.ALL }));
+    if (!clients?.length) {
+      dispatch(fetchClients({ page: 1, limit: PAGINATION.ALL }))
+        .unwrap()
+        .finally(() => setInitialFetchDone(true));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -55,6 +67,25 @@ const AddProjectPage = () => {
       .catch((err) => toast.error(err || "Failed to create project."));
   };
 
+  if (!initialFetchDone || clientsLoading) {
+    return <LoadingState message="Checking clients..." />;
+  }
+
+  if (initialFetchDone && (!clients || clients.length === 0)) {
+    return (
+      <div className="min-h-screen bg-slate-50 pb-24 md:pb-12">
+        <FormHeader title="Create New Project" subtitle="Project Details" />
+        <div className="mx-auto mt-10 max-w-7xl px-6">
+          <EmptyState
+            message="You must add a client first before creating a project."
+            actionLabel="Add Client"
+            onAction={() => navigate("/add-client")}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 pb-24 md:pb-12">
       <FormHeader title="Create New Project" subtitle="Project Details" />
@@ -73,7 +104,7 @@ const AddProjectPage = () => {
           />
         </div>
 
-        <FormActions submitLabel="Add Project" isLoading={isLoading} />
+        <FormActions submitLabel="Add Project" isLoading={projectsLoading} />
       </form>
     </div>
   );

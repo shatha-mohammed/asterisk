@@ -72,6 +72,6 @@ export const teamMembers = [
     role: "Frontend Developer",
     image: team4,
     linkedin: "https://www.linkedin.com/in/roaa-abo-qamar-2a583031a/",
-    github: "#",
+    github: "https://github.com/roaaqamar",
   },
 ];

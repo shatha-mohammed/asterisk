@@ -65,7 +65,7 @@ export const teamMembers = [
     role: "Frontend Developer",
     image: team3,
     linkedin: "https://www.linkedin.com/in/shatha-abu-qamar-634585355/",
-    github: "#",
+    github: "https://github.com/shatha-mohammed/asterisk",
   },
   {
     name: "Roaa Abu Qamar",

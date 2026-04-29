@@ -1,21 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
 
 export function useAppNavigation() {
   const navigate = useNavigate();
 
-  const goTo = (path) => {
-    navigate(path);
-  };
+  const goTo = useCallback((path) => navigate(path), [navigate]);
+  const goToRegister = useCallback(() => navigate("/register"), [navigate]);
+  const goToLogin = useCallback(() => navigate("/login"), [navigate]);
+  const goToDashboard = useCallback(() => navigate("/dashboard"), [navigate]);
+  const goBack = useCallback(() => navigate(-1), [navigate]);
 
-  const goToRegister = () => goTo("/register");
-  const goToLogin = () => goTo("/login");
-  const goToDashboard = () => goTo("/dashboard");
-
-  return {
-    goTo,
-    goToRegister,
-    goToLogin,
-    goToDashboard,
-    goBack: () => navigate(-1),
-  };
+  return { goTo, goToRegister, goToLogin, goToDashboard, goBack };
 }

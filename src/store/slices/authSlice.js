@@ -59,6 +59,43 @@ export const registerUser = createAsyncThunk(
   },
 );
 
+export const updateUser = createAsyncThunk(
+  "auth/updateUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await api.patch("/users/profile", userData);
+
+      const currentUser =
+        JSON.parse(localStorage.getItem("Asterisk_user")) || {};
+      const updatedUser = { ...currentUser, ...response };
+
+      localStorage.setItem("Asterisk_user", JSON.stringify(updatedUser));
+
+      return updatedUser;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/auth/me");
+
+      const currentUser =
+        JSON.parse(localStorage.getItem("Asterisk_user")) || {};
+      const finalUser = { ...currentUser, ...response };
+
+      localStorage.setItem("Asterisk_user", JSON.stringify(finalUser));
+      return finalUser;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const initialState = {
   user: initialAuth.user,
   token: initialAuth.token,
@@ -108,6 +145,32 @@ const authSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Update
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Fetch Current User
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

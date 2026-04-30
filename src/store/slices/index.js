@@ -26,4 +26,11 @@ export {
   deleteProject,
 } from "./projectsSlice";
 
-export { loginUser, registerUser, logout, clearError } from "./authSlice";
+export {
+  loginUser,
+  registerUser,
+  logout,
+  clearError,
+  updateUser,
+  fetchCurrentUser,
+} from "./authSlice";

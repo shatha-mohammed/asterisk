@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Button from "./Button";
-export default function Input({ label, type = "text", ...props }) {
+export default function Input({ label, type = "text", sign, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
 
@@ -20,9 +20,15 @@ export default function Input({ label, type = "text", ...props }) {
       <div className="relative">
         <input
           type={inputType}
-          className="w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 focus:outline-none"
+          className={`${sign && "pl-8"} w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 focus:outline-none`}
           {...props}
         />
+
+        {sign && (
+          <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            {sign}
+          </span>
+        )}
 
         {isPassword && (
           <Button

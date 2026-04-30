@@ -69,27 +69,27 @@ const Invoices = () => {
       <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
         <StatCard
           title="Total Billed"
-          value={stats.total.toLocaleString(undefined, {
+          value={`$ ${stats.total.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          })}
+          })}`}
           icon={<Wallet size={22} />}
         />
         <StatCard
           title="Pending"
-          value={stats.pending.toLocaleString(undefined, {
+          value={`$ ${stats.pending.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          })}
+          })}`}
           icon={<AlertCircle size={22} />}
           isRed
         />
         <StatCard
           title="Net Paid"
-          value={stats.paid.toLocaleString(undefined, {
+          value={`$ ${stats.paid.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          })}
+          })}`}
           icon={<CheckCircle2 size={22} />}
         />
       </div>

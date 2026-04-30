@@ -10,7 +10,7 @@ import {
   fetchClients,
   fetchExpenses,
 } from "@/store/slices";
-import { TAX_RATE, PAGINATION } from "@/constants";
+import { PAGINATION } from "@/constants";
 import { useAppNavigation } from "@/hooks";
 import { Button, StatCard, PageHeader, LoadingState } from "@/components/ui";
 import { ProjectCard, InvoicesTable, RevenueChart } from "@/components";
@@ -26,7 +26,6 @@ export default function Dashboard() {
   } = useSelector((state) => state.projects);
   const { items: invoices } = useSelector((state) => state.invoices);
   const { items: clients } = useSelector((state) => state.clients);
-  const { items: expenses } = useSelector((state) => state.expenses);
   const [chartRange, setChartRange] = useState("6M");
 
   // Always re-fetch on mount to avoid stale data after CRUD operations
@@ -51,36 +50,22 @@ export default function Dashboard() {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    // Only include paid invoices from this month
-    const thisMonthPaidInvoices =
-      invoices?.filter((inv) => {
-        if (inv.status !== "paid") return false;
-        return new Date(inv.date || inv.createdAt) >= startOfMonth;
-      }) || [];
-
-    const gross = thisMonthPaidInvoices.reduce(
-      (acc, inv) => acc + (inv.amount || 0),
-      0,
-    );
-
-    // Only include expenses from this month
-    const thisMonthExpenses =
-      expenses?.filter((exp) => {
-        return new Date(exp.date) >= startOfMonth;
-      }) || [];
-
-    const totalExpenses = thisMonthExpenses.reduce(
-      (acc, exp) => acc + (exp.amount || 0),
-      0,
-    );
+    // Sum all paid invoices this month
+    const thisMonthIncome =
+      invoices
+        ?.filter((inv) => {
+          if (inv.status !== "paid") return false;
+          return new Date(inv.date || inv.createdAt) >= startOfMonth;
+        })
+        .reduce((acc, inv) => acc + (inv.amount || 0), 0) || 0;
 
     return {
-      earnings: gross * (1 - TAX_RATE) - totalExpenses,
+      income: thisMonthIncome,
       activeCount: projects?.filter((p) => p.status === "active").length || 0,
       pendingInvoices:
         invoices?.filter((inv) => inv.status === "pending").length || 0,
     };
-  }, [invoices, projects, expenses]);
+  }, [invoices, projects]);
 
   if (isLoading) return <LoadingState message="Initializing Asterisk..." />;
 
@@ -122,10 +107,9 @@ export default function Dashboard() {
           icon={<Briefcase size={22} />}
         />
         <StatCard
-          title="This Month's Earnings"
-          // Formats the earnings as currency with thousand separators and exactly 2 decimal places.
-          value={`$${stats.earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          trend="Net collected"
+          title="This Month's Income"
+          value={`$${stats.income.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          trend="Gross invoiced"
           icon={<DollarSign size={22} />}
         />
         <StatCard

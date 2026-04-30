@@ -218,13 +218,16 @@ export default function TopBar() {
 
           <div className="hidden h-10 w-px bg-slate-100 md:mx-2 md:block"></div>
 
-          <div className="group flex cursor-pointer items-center gap-4 rounded-2xl p-1.5 pl-2 transition-all hover:bg-slate-50/80">
+          <Link
+            to="/profile"
+            className="group flex cursor-pointer items-center gap-4 rounded-2xl p-1.5 pl-2 transition-all hover:bg-slate-50/80"
+          >
             <div className="hidden flex-col text-right sm:flex">
               <span className="group-hover:text-brand-accent mb-1 text-sm leading-none font-black tracking-tight text-[#1E293B] transition-colors">
                 {user?.name || "Designer Name"}
               </span>
               <span className="text-muted text-[9px] font-black tracking-[0.15em] uppercase opacity-50">
-                {user?.role || "Free Agent"}
+                {user?.role || "Freelancer"}
               </span>
             </div>
 
@@ -241,7 +244,7 @@ export default function TopBar() {
               </div>
               <div className="absolute -right-1 -bottom-1 h-3 w-3 rounded-full border-[3px] border-white bg-emerald-500 md:h-4 md:w-4 md:border-4"></div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ import {
   ProjectsPage,
   Register,
   Settings,
+  Profile,
 } from "@/pages";
 import { AppLayout, AuthLayout, MainLayout } from "@/layout";
 
@@ -68,6 +69,7 @@ export default function App() {
             <Route path="/add-client" element={<AddClientPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/add-project" element={<AddProjectPage />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>

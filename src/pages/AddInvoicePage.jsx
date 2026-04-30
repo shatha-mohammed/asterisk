@@ -36,9 +36,34 @@ const AddInvoicePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // edit the state for every input
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    // reset project and amount when client changes
+    if (name === "clientId") {
+      setFormData((prev) => ({
+        ...prev,
+        clientId: value,
+        projectId: "",
+        amount: "",
+      }));
+      return;
+    }
+    // show only client's projects
+    if (name === "projectId") {
+      const selectedProject = projects?.find((p) => p.id === value);
+      if (selectedProject) {
+        setFormData((prev) => ({
+          ...prev,
+          projectId: value,
+          amount: selectedProject.budget ?? "",
+        }));
+        return;
+      }
+    }
+    // edit the state for every input
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -91,13 +116,20 @@ const AddInvoicePage = () => {
               value={formData.projectId}
               onChange={handleChange}
               required
+              disabled={!formData.clientId}
             >
-              <option value="">Select project</option>
-              {projects?.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
+              <option value="">
+                {!formData.clientId
+                  ? "Select a client first"
+                  : "Select project"}
+              </option>
+              {projects
+                ?.filter((p) => p.clientId === formData.clientId)
+                .map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.title}
+                  </option>
+                ))}
             </Select>
 
             <Input

@@ -78,6 +78,24 @@ export const updateUser = createAsyncThunk(
   },
 );
 
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/auth/me");
+
+      const currentUser =
+        JSON.parse(localStorage.getItem("Asterisk_user")) || {};
+      const finalUser = { ...currentUser, ...response };
+
+      localStorage.setItem("Asterisk_user", JSON.stringify(finalUser));
+      return finalUser;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const initialState = {
   user: initialAuth.user,
   token: initialAuth.token,
@@ -140,6 +158,19 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Fetch Current User
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

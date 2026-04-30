@@ -32,4 +32,5 @@ export {
   logout,
   clearError,
   updateUser,
+  fetchCurrentUser,
 } from "./authSlice";

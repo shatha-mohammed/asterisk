@@ -76,11 +76,7 @@ export default function ProjectsPage() {
       />
 
       {/* Stats */}
-<<<<<<< HEAD
       <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8">
-=======
-      <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         <StatCard
           title="Total Projects"
           value={stats.total}

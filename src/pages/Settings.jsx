@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -161,7 +160,7 @@ export default function Settings() {
                       Choose Image
                     </label>
                     {avatarFile && (
-                      <span className="max-w-[120px] truncate text-xs text-slate-500">
+                      <span className="max-w-30 truncate text-xs text-slate-500">
                         {avatarFile.name}
                       </span>
                     )}
@@ -252,30 +251,6 @@ export default function Settings() {
               </div>
             </form>
           </FormSection>
-=======
-import { Button, PageHeader } from "@/components/ui";
-
-export default function Settings() {
-  return (
-    <div className="animate-in fade-in mx-auto max-w-400 p-4 duration-500 lg:p-10">
-      <PageHeader title="Settings" subtitle="System Preferences" />
-
-      {/* Coming soon card */}
-      <div className="rounded-2xl border border-slate-100 bg-white p-20 text-center shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]">
-        <h2 className="mb-4 text-2xl font-black text-slate-800">
-          Settings Coming Soon
-        </h2>
-        <p className="text-muted mx-auto max-w-md text-sm">
-          The settings panel is under development. Soon you'll be able to
-          configure your profile, notifications, and tax preferences here.
-        </p>
-        <div className="mt-8 flex justify-center">
-          <Button
-            text="Go Back"
-            variant="outline"
-            onClick={() => window.history.back()}
-          />
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         </div>
       </div>
     </div>

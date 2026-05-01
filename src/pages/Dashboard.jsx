@@ -10,11 +10,7 @@ import {
   fetchClients,
   fetchExpenses,
 } from "@/store/slices";
-<<<<<<< HEAD
 import { PAGINATION } from "@/constants";
-=======
-import { TAX_RATE, PAGINATION } from "@/constants";
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 import { useAppNavigation } from "@/hooks";
 import { Button, StatCard, PageHeader, LoadingState } from "@/components/ui";
 import { ProjectCard, InvoicesTable, RevenueChart } from "@/components";
@@ -30,10 +26,6 @@ export default function Dashboard() {
   } = useSelector((state) => state.projects);
   const { items: invoices } = useSelector((state) => state.invoices);
   const { items: clients } = useSelector((state) => state.clients);
-<<<<<<< HEAD
-=======
-  const { items: expenses } = useSelector((state) => state.expenses);
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
   const [chartRange, setChartRange] = useState("6M");
 
   // Always re-fetch on mount to avoid stale data after CRUD operations
@@ -58,7 +50,6 @@ export default function Dashboard() {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-<<<<<<< HEAD
     // Sum all paid invoices this month
     const thisMonthIncome =
       invoices
@@ -70,42 +61,11 @@ export default function Dashboard() {
 
     return {
       income: thisMonthIncome,
-=======
-    // Only include paid invoices from this month
-    const thisMonthPaidInvoices =
-      invoices?.filter((inv) => {
-        if (inv.status !== "paid") return false;
-        return new Date(inv.date || inv.createdAt) >= startOfMonth;
-      }) || [];
-
-    const gross = thisMonthPaidInvoices.reduce(
-      (acc, inv) => acc + (inv.amount || 0),
-      0,
-    );
-
-    // Only include expenses from this month
-    const thisMonthExpenses =
-      expenses?.filter((exp) => {
-        return new Date(exp.date) >= startOfMonth;
-      }) || [];
-
-    const totalExpenses = thisMonthExpenses.reduce(
-      (acc, exp) => acc + (exp.amount || 0),
-      0,
-    );
-
-    return {
-      earnings: gross * (1 - TAX_RATE) - totalExpenses,
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
       activeCount: projects?.filter((p) => p.status === "active").length || 0,
       pendingInvoices:
         invoices?.filter((inv) => inv.status === "pending").length || 0,
     };
-<<<<<<< HEAD
   }, [invoices, projects]);
-=======
-  }, [invoices, projects, expenses]);
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 
   if (isLoading) return <LoadingState message="Initializing Asterisk..." />;
 
@@ -139,11 +99,7 @@ export default function Dashboard() {
       />
 
       {/* Stat cards */}
-<<<<<<< HEAD
       <div className="mb-16 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8">
-=======
-      <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-3">
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         <StatCard
           title="Active Projects"
           value={stats.activeCount}
@@ -151,16 +107,9 @@ export default function Dashboard() {
           icon={<Briefcase size={22} />}
         />
         <StatCard
-<<<<<<< HEAD
           title="This Month's Income"
           value={`$${stats.income.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           trend="Gross invoiced"
-=======
-          title="This Month's Earnings"
-          // Formats the earnings as currency with thousand separators and exactly 2 decimal places.
-          value={`$${stats.earnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-          trend="Net collected"
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
           icon={<DollarSign size={22} />}
         />
         <StatCard
@@ -173,11 +122,7 @@ export default function Dashboard() {
       </div>
 
       {/* Revenue chart */}
-<<<<<<< HEAD
       <div className="mb-16 overflow-hidden rounded-[3rem] border border-slate-50 bg-white p-10 shadow-sm lg:p-12">
-=======
-      <div className="mb-16 rounded-[3rem] border border-slate-50 bg-white p-10 shadow-sm lg:p-12">
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         <div className="mb-12 flex items-center justify-between">
           <div>
             <h3 className="text-xl font-black tracking-tight text-indigo-900">

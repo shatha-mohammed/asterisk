@@ -40,14 +40,6 @@ export default function App() {
     });
   }, [navigate, dispatch]);
 
-  // The 401 interceptor — dispatches logout and redirects to login
-  useEffect(() => {
-    setOnUnauthorized(() => {
-      dispatch(logout());
-      navigate("/login", { replace: true });
-    });
-  }, [navigate, dispatch]);
-
   return (
     <>
       <SEO />

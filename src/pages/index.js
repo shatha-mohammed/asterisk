@@ -13,8 +13,5 @@ export { default as Invoices } from "./Invoices";
 export { default as Login } from "./Login";
 export { default as ProjectsPage } from "./ProjectsPage";
 export { default as Register } from "./Register";
-<<<<<<< HEAD
 export { default as Profile } from "./Profile";
-=======
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 export { default as Settings } from "./Settings";

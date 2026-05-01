@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
 import { registerUser, clearError } from "@/store/slices";
-=======
-import toast from "react-hot-toast";
-
-import { registerUser, clearError } from "@/store/slices";
-import { supabase } from "@/services/supabaseClient";
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 import { useAppNavigation } from "@/hooks";
 import { Input, Button } from "@/components/ui";
 import { AuthFooter, AuthRedirect } from "@/components";
@@ -22,14 +15,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-<<<<<<< HEAD
   });
-=======
-    avatarUrl: "",
-  });
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 
   // Redirect to dashboard if already authenticated
   useEffect(() => {
@@ -42,73 +28,14 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-<<<<<<< HEAD
-=======
-  // Upload avatar
-  const handleFileChange = (e) => {
-    if (error) dispatch(clearError());
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Set max avatar size = 2MB
-    const MAX_SIZE_MB = 2;
-    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      toast.error(`File too large. Maximum size is ${MAX_SIZE_MB}MB.`);
-      e.target.value = "";
-      return;
-    }
-    setAvatarFile(file);
-  };
-
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
   // Submit form action
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-<<<<<<< HEAD
       // dispatch the register
       await dispatch(registerUser(formData)).unwrap();
     } catch (err) {
-=======
-      let finalAvatarUrl = "";
-
-      if (avatarFile) {
-        setIsUploading(true);
-
-        // Rename the avatar with a unique name
-        const fileExt = avatarFile.name.split(".").pop();
-        const fileName = `${Date.now()}-${Math.round(Math.random() * 10000)}.${fileExt}`;
-        const filePath = fileName;
-
-        // upload the photo
-        const { error: uploadError } = await supabase.storage
-          .from("profiles")
-          .upload(filePath, avatarFile);
-
-        // stop if there is an error
-        if (uploadError) throw uploadError;
-
-        // get the public url for avatar
-        const { data } = supabase.storage
-          .from("profiles")
-          .getPublicUrl(filePath);
-
-        finalAvatarUrl = data.publicUrl;
-        setIsUploading(false);
-      }
-
-      // collect the form data with avatar
-      const payload = {
-        ...formData,
-        avatarUrl: finalAvatarUrl,
-      };
-
-      // dispatch the register
-      await dispatch(registerUser(payload)).unwrap();
-    } catch (err) {
-      setIsUploading(false);
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
       console.error("Registration failed:", err);
     }
   };
@@ -168,17 +95,6 @@ export default function Register() {
           placeholder="Create a strong password"
         />
 
-<<<<<<< HEAD
-=======
-        <Input
-          label="Avatar Profile"
-          type="file"
-          name="avatar"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         <div className="text-xs leading-relaxed text-gray-500">
           By creating an account, you agree to our{" "}
           <Link
@@ -201,19 +117,9 @@ export default function Register() {
           type="submit"
           variant="primary"
           size="full"
-<<<<<<< HEAD
           isLoading={isLoading}
         >
           {isLoading ? "Signing up..." : "Sign up"}
-=======
-          isLoading={isLoading || isUploading}
-        >
-          {isUploading
-            ? "Uploading Avatar..."
-            : isLoading
-              ? "Signing up..."
-              : "Sign up"}
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
         </Button>
       </form>
 

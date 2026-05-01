@@ -36,7 +36,6 @@ const AddInvoicePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-<<<<<<< HEAD
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -57,7 +56,10 @@ const AddInvoicePage = () => {
         setFormData((prev) => ({
           ...prev,
           projectId: value,
-          amount: Math.max(0, (selectedProject.budget || 0) - (selectedProject.deposit || 0)),
+          amount: Math.max(
+            0,
+            (selectedProject.budget || 0) - (selectedProject.deposit || 0),
+          ),
         }));
         return;
       }
@@ -65,11 +67,6 @@ const AddInvoicePage = () => {
     // edit the state for every input
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-=======
-  // edit the state for every input
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -122,7 +119,6 @@ const AddInvoicePage = () => {
               value={formData.projectId}
               onChange={handleChange}
               required
-<<<<<<< HEAD
               disabled={!formData.clientId}
             >
               <option value="">
@@ -137,15 +133,6 @@ const AddInvoicePage = () => {
                     {p.title}
                   </option>
                 ))}
-=======
-            >
-              <option value="">Select project</option>
-              {projects?.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
             </Select>
 
             <Input

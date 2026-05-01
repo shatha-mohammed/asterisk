@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD
-import { fetchInvoices, deleteInvoice, updateInvoice, fetchClients, fetchProjects } from "@/store/slices";
-=======
-import { fetchInvoices, deleteInvoice, updateInvoice } from "@/store/slices";
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
+import {
+  fetchInvoices,
+  deleteInvoice,
+  updateInvoice,
+  fetchClients,
+  fetchProjects,
+} from "@/store/slices";
 import { Plus, Wallet, CheckCircle2, AlertCircle } from "lucide-react";
 import { useAppNavigation, useCrudModals } from "@/hooks";
 import { PAGINATION } from "@/constants";
@@ -32,11 +34,8 @@ const Invoices = () => {
   // Re-fetch invoices on page change
   useEffect(() => {
     dispatch(fetchInvoices({ page, limit: PAGINATION.LIST }));
-<<<<<<< HEAD
     dispatch(fetchClients({ page: 1, limit: PAGINATION.ALL }));
     dispatch(fetchProjects({ page: 1, limit: PAGINATION.ALL }));
-=======
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
@@ -75,7 +74,6 @@ const Invoices = () => {
       />
 
       {/* Stats row */}
-<<<<<<< HEAD
       <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8">
         <StatCard
           title="Total Billed"
@@ -83,46 +81,23 @@ const Invoices = () => {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`}
-=======
-      <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
-        <StatCard
-          title="Total Billed"
-          value={stats.total.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
           icon={<Wallet size={22} />}
         />
         <StatCard
           title="Pending"
-<<<<<<< HEAD
           value={`$ ${stats.pending.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`}
-=======
-          value={stats.pending.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
           icon={<AlertCircle size={22} />}
           isRed
         />
         <StatCard
           title="Net Paid"
-<<<<<<< HEAD
           value={`$ ${stats.paid.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}`}
-=======
-          value={stats.paid.toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
           icon={<CheckCircle2 size={22} />}
         />
       </div>

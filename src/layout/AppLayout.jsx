@@ -16,11 +16,7 @@ export default function AppLayout() {
         </div>
 
         {/* 3. Page Content */}
-<<<<<<< HEAD
         <main className="max-w-screen flex-1 p-4 pb-24 md:p-8 md:pb-8">
-=======
-        <main className="flex-1 p-4 pb-24 md:p-8 md:pb-8">
->>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
           <Outlet />
         </main>
 

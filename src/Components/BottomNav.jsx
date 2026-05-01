@@ -19,13 +19,13 @@ const BottomNav = () => {
   ];
 
   return (
-    <nav className="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-center border-t border-slate-100 bg-white/80 px-2 py-3 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] backdrop-blur-lg md:hidden">
+    <nav className="fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between border-t border-slate-100 bg-white/80 px-1 py-3 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] backdrop-blur-lg sm:px-4 md:hidden">
       {navItems.map((item) => (
         <NavLink
           key={item.name}
           to={item.path}
           className={({ isActive }) =>
-            `relative flex flex-col items-center gap-1.5 px-3 py-2 transition-all duration-300 ${isActive ? "text-brand-accent" : "text-slate-400 opacity-60"} `
+            `relative flex flex-1 flex-col items-center justify-center gap-1.5 py-2 transition-all duration-300 ${isActive ? "text-brand-accent" : "text-slate-400 opacity-60"} `
           }
         >
           {({ isActive }) => (
@@ -34,7 +34,7 @@ const BottomNav = () => {
                 {item.icon}
               </div>
 
-              <span className="text-[9px] leading-none font-black tracking-widest uppercase">
+              <span className="max-w-[100%] truncate text-[8px] leading-none font-black tracking-wider uppercase sm:text-[9px]">
                 {item.name}
               </span>
 

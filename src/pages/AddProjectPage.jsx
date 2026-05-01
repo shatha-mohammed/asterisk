@@ -31,6 +31,7 @@ const AddProjectPage = () => {
     clientId: "",
     budget: "",
     commission: "",
+    deposit: "",
     dueDate: "",
   });
 
@@ -53,7 +54,8 @@ const AddProjectPage = () => {
     const payload = {
       ...formData,
       budget: parseFloat(formData.budget) || 0,
-      commission: parseInt(formData.commission),
+      commission: parseFloat(formData.commission) || 15,
+      deposit: parseFloat(formData.deposit) || 0,
       dueDate: formData.dueDate
         ? new Date(formData.dueDate).toISOString()
         : null,

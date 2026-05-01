@@ -51,6 +51,7 @@ export default function EditModal({
       if (payload.commission !== undefined)
         payload.commission = Number(payload.commission);
       if (payload.budget !== undefined) payload.budget = Number(payload.budget);
+      if (payload.deposit !== undefined) payload.deposit = Number(payload.deposit);
       // Sanitize the payload by stripping out internal/read-only fields before sending the API request
       INTERNAL_FIELDS.forEach((key) => {
         delete payload[key];
@@ -178,7 +179,8 @@ export default function EditModal({
                     ? "date"
                     : key.toLowerCase().includes("amount") ||
                         key === "budget" ||
-                        key === "commission"
+                        key === "commission" ||
+                        key === "deposit"
                       ? "number"
                       : "text"
                 }

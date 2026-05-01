@@ -47,11 +47,14 @@ export default function EditModal({
   function handleSave() {
     if (onSave) {
       const payload = { ...formData };
+<<<<<<< HEAD
 
       if (payload.commission !== undefined)
         payload.commission = Number(payload.commission);
       if (payload.budget !== undefined) payload.budget = Number(payload.budget);
       if (payload.deposit !== undefined) payload.deposit = Number(payload.deposit);
+=======
+>>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
       // Sanitize the payload by stripping out internal/read-only fields before sending the API request
       INTERNAL_FIELDS.forEach((key) => {
         delete payload[key];
@@ -177,10 +180,14 @@ export default function EditModal({
                 type={
                   key.toLowerCase().includes("date")
                     ? "date"
+<<<<<<< HEAD
                     : key.toLowerCase().includes("amount") ||
                         key === "budget" ||
                         key === "commission" ||
                         key === "deposit"
+=======
+                    : key.toLowerCase().includes("amount") || key === "budget"
+>>>>>>> 45d1129f9268c5fd00707dc9c37d7e35b7671d8b
                       ? "number"
                       : "text"
                 }

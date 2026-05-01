@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { UserCircle, Lock } from "lucide-react";
 
-import { updateUser, clearError } from "@/store/slices";
+import { updateUser, clearError, changePassword } from "@/store/slices";
 import { supabase } from "@/services/supabaseClient";
 import { Input, Button, PageHeader, FormSection } from "@/components/ui";
 
@@ -19,6 +19,42 @@ export default function Settings() {
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(user?.avatarUrl || "");
   const [isUploading, setIsUploading] = useState(false);
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const handlePasswordChange = (e) => {
+    if (error) dispatch(clearError());
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      return toast.error("New passwords do not match");
+    }
+
+    try {
+      await dispatch(
+        changePassword({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword,
+        }),
+      ).unwrap();
+
+      toast.success("Password changed successfully!");
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (err) {
+      toast.error(err || "Failed to change password");
+    }
+  };
 
   const handleFileChange = (e) => {
     if (error) dispatch(clearError());
@@ -174,34 +210,43 @@ export default function Settings() {
         {/* Change Password Section */}
         <div className="flex w-full flex-col gap-6">
           <FormSection icon={<Lock size={24} />} title="Change Password">
-            <form className="space-y-6">
+            <form onSubmit={handlePasswordSubmit} className="space-y-6">
               <Input
                 label="Current Password"
                 type="password"
                 name="currentPassword"
+                value={passwordData.currentPassword}
+                onChange={handlePasswordChange}
+                required
                 placeholder="Enter current password"
               />
               <Input
                 label="New Password"
                 type="password"
                 name="newPassword"
+                value={passwordData.newPassword}
+                onChange={handlePasswordChange}
+                required
                 placeholder="Enter new password"
               />
               <Input
                 label="Confirm New Password"
                 type="password"
                 name="confirmPassword"
+                value={passwordData.confirmPassword}
+                onChange={handlePasswordChange}
+                required
                 placeholder="Confirm new password"
               />
               <div className="flex justify-end border-t border-slate-100 pt-4">
                 <Button
-                  type="button"
+                  type="submit"
                   variant="primary"
-                  onClick={() =>
-                    toast.success("Password changed successfully!")
-                  }
+                  isLoading={isLoading && !isUploading}
                 >
-                  Update Password
+                  {isLoading && !isUploading
+                    ? "Updating..."
+                    : "Update Password"}
                 </Button>
               </div>
             </form>

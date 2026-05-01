@@ -33,4 +33,5 @@ export {
   clearError,
   updateUser,
   fetchCurrentUser,
+  changePassword,
 } from "./authSlice";

@@ -56,7 +56,7 @@ const AddInvoicePage = () => {
         setFormData((prev) => ({
           ...prev,
           projectId: value,
-          amount: selectedProject.budget ?? "",
+          amount: Math.max(0, (selectedProject.budget || 0) - (selectedProject.deposit || 0)),
         }));
         return;
       }

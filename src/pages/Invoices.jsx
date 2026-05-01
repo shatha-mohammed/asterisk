@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInvoices, deleteInvoice, updateInvoice, fetchClients, fetchProjects } from "@/store/slices";
+import {
+  fetchInvoices,
+  deleteInvoice,
+  updateInvoice,
+  fetchClients,
+  fetchProjects,
+} from "@/store/slices";
 import { Plus, Wallet, CheckCircle2, AlertCircle } from "lucide-react";
 import { useAppNavigation, useCrudModals } from "@/hooks";
 import { PAGINATION } from "@/constants";
@@ -68,7 +74,7 @@ const Invoices = () => {
       />
 
       {/* Stats row */}
-      <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8">
         <StatCard
           title="Total Billed"
           value={`$ ${stats.total.toLocaleString(undefined, {

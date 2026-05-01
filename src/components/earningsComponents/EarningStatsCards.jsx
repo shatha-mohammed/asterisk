@@ -6,10 +6,27 @@ const fmt = (n) =>
 
 export default function EarningStatsCards({ totals }) {
   return (
-    <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
-      <StatCard title="Gross Invoiced" value={fmt(totals.gross)} trend="Total billed" icon={<DollarSign size={22} />} />
-      <StatCard title="Commission" value={fmt(totals.commission)} trend="Platform fee" icon={<Percent size={22} />} isRed />
-      <StatCard title="Expenses" value={fmt(totals.expenses)} trend="Business costs" icon={<TrendingDown size={22} />} isRed />
+    <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-8 lg:grid-cols-4">
+      <StatCard
+        title="Gross Invoiced"
+        value={fmt(totals.gross)}
+        trend="Total billed"
+        icon={<DollarSign size={22} />}
+      />
+      <StatCard
+        title="Commission"
+        value={fmt(totals.commission)}
+        trend="Platform fee"
+        icon={<Percent size={22} />}
+        isRed
+      />
+      <StatCard
+        title="Expenses"
+        value={fmt(totals.expenses)}
+        trend="Business costs"
+        icon={<TrendingDown size={22} />}
+        isRed
+      />
       <StatCard
         title="Net Earning"
         value={fmt(totals.net)}

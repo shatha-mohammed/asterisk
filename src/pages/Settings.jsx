@@ -160,7 +160,7 @@ export default function Settings() {
                       Choose Image
                     </label>
                     {avatarFile && (
-                      <span className="max-w-[120px] truncate text-xs text-slate-500">
+                      <span className="max-w-30 truncate text-xs text-slate-500">
                         {avatarFile.name}
                       </span>
                     )}

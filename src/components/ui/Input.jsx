@@ -11,7 +11,10 @@ export default function Input({ label, type = "text", sign, ...props }) {
     <div>
       <div className="mb-1 flex items-end justify-between">
         {label && (
-          <label htmlFor={props.id || props.name} className="text-muted block text-sm font-medium">
+          <label
+            htmlFor={props.id || props.name}
+            className="text-muted block text-sm font-medium"
+          >
             {label}
           </label>
         )}

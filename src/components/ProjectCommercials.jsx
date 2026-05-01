@@ -46,6 +46,17 @@ const ProjectCommercials = ({ formData, onChange, clients }) => {
           placeholder="ex: 15%"
           sign="%"
         />
+
+        {/* Deposit */}
+        <Input
+          label="Deposit Amount"
+          name="deposit"
+          value={formData.deposit}
+          onChange={onChange}
+          type="number"
+          placeholder="0.00"
+          sign="$"
+        />
       </div>
     </section>
   );

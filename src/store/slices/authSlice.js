@@ -96,6 +96,18 @@ export const fetchCurrentUser = createAsyncThunk(
   },
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await api.patch("/users/password", passwordData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.details[1]);
+    }
+  },
+);
+
 const initialState = {
   user: initialAuth.user,
   token: initialAuth.token,
@@ -171,6 +183,18 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      // Change Password
+      .addCase(changePassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });

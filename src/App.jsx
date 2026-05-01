@@ -26,6 +26,7 @@ import {
   Profile,
 } from "@/pages";
 import { AppLayout, AuthLayout, MainLayout } from "@/layout";
+import { SEO } from "@/components";
 
 export default function App() {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ export default function App() {
 
   return (
     <>
+      <SEO />
       <Toaster position="top-right" />
       <Routes>
         {/* Public pages */}

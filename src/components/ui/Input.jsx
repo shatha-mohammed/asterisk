@@ -11,7 +11,7 @@ export default function Input({ label, type = "text", sign, ...props }) {
     <div>
       <div className="mb-1 flex items-end justify-between">
         {label && (
-          <label className="text-muted block text-sm font-medium">
+          <label htmlFor={props.id || props.name} className="text-muted block text-sm font-medium">
             {label}
           </label>
         )}
@@ -19,6 +19,7 @@ export default function Input({ label, type = "text", sign, ...props }) {
 
       <div className="relative">
         <input
+          id={props.id || props.name}
           type={inputType}
           className={`${sign && "pl-8"} w-full rounded-lg border border-gray-300 px-4 py-3 transition-all focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 focus:outline-none`}
           {...props}

@@ -8,10 +8,10 @@ export default function Hero() {
   return (
     <div className="my-23 grid grid-cols-1 items-center justify-center gap-12.5 text-center sm:my-0 sm:h-[calc(100vh-64px)] sm:grid-cols-2 lg:text-left">
       <div className="flex flex-col">
-        <h2 className="text-[24px] leading-10 font-bold text-indigo-900 sm:text-[48px] sm:leading-15">
+        <h1 className="text-[24px] leading-10 font-bold text-indigo-900 sm:text-[48px] sm:leading-15">
           Scale your freelance business with{" "}
           <span className="text-brand-accent">calm control</span>.
-        </h2>
+        </h1>
 
         <p className="my-3.75 text-[18px] leading-7 text-slate-600 sm:my-7.5">
           The high-end productivity workspace built for independent contractors

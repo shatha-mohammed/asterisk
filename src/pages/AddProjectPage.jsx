@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addProject, fetchClients } from "@/store/slices";
+import { addProject, fetchClients, addInvoice } from "@/store/slices";
 import { PAGINATION } from "@/constants";
 import {
   FormHeader,
@@ -62,7 +62,23 @@ const AddProjectPage = () => {
     };
     dispatch(addProject(payload))
       .unwrap()
-      .then(() => {
+      .then((newProject) => {
+        const projectId =
+          newProject?.data?.id || newProject?.id || newProject?._id;
+
+        if (payload.deposit > 0 && projectId) {
+          dispatch(
+            addInvoice({
+              projectId,
+              clientId: payload.clientId,
+              amount: payload.deposit,
+              dueDate: new Date().toISOString(),
+            }),
+          ).catch((err) =>
+            console.error("Failed to auto-create deposit invoice", err),
+          );
+        }
+
         toast.success("Project created!");
         navigate("/projects");
       })

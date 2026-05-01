@@ -12,12 +12,12 @@ export default function InvoicesTable({ invoices, onEdit, onDelete }) {
 
   // Get project name
   function getProjectName(id) {
-    projects?.find((p) => p.id === id)?.title || `Project ${id}`;
+    return projects?.find((p) => p.id === id)?.title || `Project ${id}`;
   }
 
   // Get client name
   function getClientName(id) {
-    clients?.find((c) => c.id === id)?.name || `ID: ${id}`;
+    return clients?.find((c) => c.id === id)?.name || `ID: ${id}`;
   }
 
   return (

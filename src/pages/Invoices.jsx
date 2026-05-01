@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInvoices, deleteInvoice, updateInvoice } from "@/store/slices";
+import { fetchInvoices, deleteInvoice, updateInvoice, fetchClients, fetchProjects } from "@/store/slices";
 import { Plus, Wallet, CheckCircle2, AlertCircle } from "lucide-react";
 import { useAppNavigation, useCrudModals } from "@/hooks";
 import { PAGINATION } from "@/constants";
@@ -28,6 +28,8 @@ const Invoices = () => {
   // Re-fetch invoices on page change
   useEffect(() => {
     dispatch(fetchInvoices({ page, limit: PAGINATION.LIST }));
+    dispatch(fetchClients({ page: 1, limit: PAGINATION.ALL }));
+    dispatch(fetchProjects({ page: 1, limit: PAGINATION.ALL }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 

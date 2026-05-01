@@ -34,7 +34,7 @@ export const featuresData = [
 ];
 export const TAX_RATE = 0.15;
 export const VAT_RATE = 0.2;
-export const PAGINATION = { DASHBOARD: 6, LIST: 10, ALL: 100 };
+export const PAGINATION = { DASHBOARD: 6, LIST: 10, ALL: 999999 };
 export const INTERNAL_FIELDS = [
   "id",
   "_id",
